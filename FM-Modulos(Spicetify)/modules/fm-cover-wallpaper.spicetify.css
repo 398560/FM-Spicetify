@@ -7,8 +7,12 @@
 :root {
   --fm-flashbang-wallpaper: url("https://files.catbox.moe/44fu7x.jpg");
 
-  --fm-wallpaper-image-normal: var(--fm-cover-url, var(--image_url, none));
-  --fm-wallpaper-image: var(--fm-wallpaper-image-normal);
+  --fm-cover-url: var(--image_url, none);
+
+  /* 0 = usa capa normal | 1 = usa wallpaper anti-flashbang */
+  --fm-use-flashbang-wallpaper: 0;
+
+  --fm-wallpaper-image: var(--fm-cover-url);
 
   --fm-wallpaper-opacity: 0.82;
   --fm-wallpaper-blur: 24px;
@@ -18,6 +22,14 @@
   --fm-wallpaper-tint: rgba(4, 6, 8, 0.46);
   --fm-wallpaper-vignette: rgba(0, 0, 0, 0.76);
   --fm-wallpaper-accent-rgb: var(--fm-accent-rgb, var(--spice-rgb-button, 125, 147, 135));
+}
+
+:root[data-fm-flashbang="true"] {
+  --fm-wallpaper-image: var(--fm-flashbang-wallpaper);
+}
+
+:root[data-fm-flashbang="false"] {
+  --fm-wallpaper-image: var(--fm-cover-url);
 }
 
 html,
