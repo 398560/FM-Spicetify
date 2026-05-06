@@ -17,6 +17,8 @@ Modulos CSS reutilizaveis para montar temas Spicetify com identidade FM.
 
 ## Ordem sugerida
 
+Use o modulo de fixes por ultimo, porque ele precisa vencer seletores dos outros modulos.
+
 ```css
 @import url("./modules/fm-cover-wallpaper.spicetify.css");
 @import url("./modules/fm-clean-reset.spicetify.css");

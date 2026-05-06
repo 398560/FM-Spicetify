@@ -12,6 +12,7 @@
 @import url("../modules/fm-accent-glow.css");
 @import url("../modules/fm-typography.css");
 @import url("../modules/fm-watermark.css");
+@import url("../modules/fm-interface-fixes.spicetify.css");
 
 :root {
   --fm-wallpaper-image: var(--fm-cover-url, var(--image_url, none));

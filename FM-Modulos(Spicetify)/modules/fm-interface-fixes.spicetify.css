@@ -1,0 +1,339 @@
+/**
+ * @name FM Interface Fixes
+ * @description Fixes de hitbox, camadas e flicker para temas Spicetify com vidro/transparencia.
+ * @version 1.0.0
+ *
+ * Use este modulo no fim da lista de imports. Ele nao define visual forte:
+ * apenas estabiliza areas clicaveis, overlays e estados especiais do Spotify.
+ */
+
+:root {
+  --fm-layer-wallpaper: 0;
+  --fm-layer-content: 1;
+  --fm-layer-main: 20;
+  --fm-layer-main-container: 21;
+  --fm-layer-right-sidebar: 45;
+  --fm-layer-left-sidebar: 60;
+  --fm-layer-left-sidebar-expanded: 68;
+  --fm-layer-global-nav: 70;
+  --fm-layer-cover-expanded: 76;
+  --fm-layer-now-playing-bar: 80;
+  --fm-layer-cinema: 90;
+  --fm-layer-popover: 1000;
+  --fm-expanded-cover-size: clamp(220px, 38vmin, 420px);
+}
+
+.Root,
+.Root__top-container {
+  isolation: isolate;
+}
+
+.Root__top-container {
+  position: relative;
+}
+
+.Root__top-container > * {
+  min-width: 0;
+}
+
+.Root__top-container::before,
+.Root__top-container::after,
+.Root::before,
+.Root::after,
+.main-view-container::before,
+.main-view-container::after,
+.Root__nav-bar::before,
+.Root__nav-bar::after,
+.Root__right-sidebar::before,
+.Root__right-sidebar::after,
+.Root__now-playing-bar::before,
+.Root__now-playing-bar::after,
+.main-topBar-withBackgroundBlur::before,
+.main-nowPlayingView-contextItemInfo::before,
+.main-entityHeader-overlay,
+.x-entityHeader-overlay,
+.main-topBar-overlay {
+  pointer-events: none !important;
+}
+
+/* Painel/camada principal. Mantem overlays decorativos atras dos cliques. */
+.Root__main-view {
+  position: relative;
+  z-index: var(--fm-layer-main) !important;
+  pointer-events: auto !important;
+}
+
+.main-view-container {
+  position: relative;
+  z-index: var(--fm-layer-main-container) !important;
+  pointer-events: auto !important;
+}
+
+.Root__right-sidebar {
+  position: relative;
+  z-index: var(--fm-layer-right-sidebar) !important;
+  pointer-events: auto !important;
+}
+
+.Root__nav-bar,
+#Desktop_LeftSidebar_Id {
+  position: relative;
+  z-index: var(--fm-layer-left-sidebar) !important;
+  pointer-events: auto !important;
+}
+
+.Root__globalNav {
+  position: relative;
+  z-index: var(--fm-layer-global-nav) !important;
+  pointer-events: auto !important;
+}
+
+.Root__now-playing-bar,
+.main-nowPlayingBar-container,
+.main-nowPlayingBar-nowPlayingBar {
+  position: relative;
+  z-index: var(--fm-layer-now-playing-bar) !important;
+  pointer-events: auto !important;
+}
+
+.Root__nav-bar > *,
+#Desktop_LeftSidebar_Id > *,
+.Root__right-sidebar > *,
+.Root__globalNav > *,
+.Root__now-playing-bar > *,
+.main-view-container > * {
+  position: relative;
+}
+
+/* Library expandida: evita ficar por baixo do main view ou do right panel. */
+#Desktop_LeftSidebar_Id[class*="expanded"],
+#Desktop_LeftSidebar_Id.yXlTmwjWtDebsivA1gM6,
+.Root__nav-bar:has(.main-yourLibraryX-libraryIsExpanded:not(.main-yourLibraryX-libraryIsCollapsed)),
+.Root__nav-bar:has(#Desktop_LeftSidebar_Id[class*="expanded"]),
+.Root__nav-bar:has(#Desktop_LeftSidebar_Id.yXlTmwjWtDebsivA1gM6) {
+  z-index: var(--fm-layer-left-sidebar-expanded) !important;
+}
+
+.main-yourLibraryX-entryPoints,
+.main-yourLibraryX-libraryContainer,
+.main-yourLibraryX-libraryRootlist,
+.main-rootlist-wrapper,
+.main-rootlist-wrapper [role="row"],
+.Root__nav-bar button,
+#Desktop_LeftSidebar_Id button {
+  pointer-events: auto !important;
+}
+
+/* Resizers precisam ficar clicaveis mesmo com bordas/vidro por cima. */
+.LayoutResizer__resize-bar,
+.LayoutResizer__input,
+.Root__nav-bar .LayoutResizer__resize-bar,
+.Root__right-sidebar .LayoutResizer__resize-bar {
+  z-index: calc(var(--fm-layer-popover) - 2) !important;
+  pointer-events: auto !important;
+}
+
+/* Cover expand/collapse da musica atual. */
+.main-nowPlayingWidget-coverArt,
+.main-coverSlotCollapsed-container,
+.main-coverSlotCollapsed-navAltContainer,
+[data-testid="cover-art-button"] {
+  position: relative;
+  z-index: 6;
+  isolation: isolate;
+  pointer-events: auto !important;
+}
+
+.main-nowPlayingBar-container,
+.main-nowPlayingBar-nowPlayingBar,
+.main-nowPlayingBar-left,
+.main-nowPlayingWidget-nowPlaying,
+.main-nowPlayingWidget-coverArt,
+.main-coverSlotCollapsed-container,
+.main-coverSlotCollapsed-navAltContainer {
+  overflow: visible !important;
+}
+
+.main-nowPlayingWidget-coverArt *,
+.main-coverSlotCollapsed-container *,
+.main-coverSlotCollapsed-navAltContainer *,
+[data-testid="cover-art-button"] * {
+  pointer-events: auto;
+}
+
+.main-coverSlotCollapsed-expandButton,
+.main-coverSlotExpandedCollapseButton-collapseButton {
+  position: absolute;
+  z-index: 12 !important;
+  min-width: 28px;
+  min-height: 28px;
+  pointer-events: auto !important;
+  touch-action: manipulation;
+}
+
+.main-coverSlotCollapsed-expandButton::before,
+.main-coverSlotExpandedCollapseButton-collapseButton::before {
+  content: "";
+  position: absolute;
+  inset: -8px;
+}
+
+.main-coverSlotCollapsed-expandButton svg,
+.main-coverSlotCollapsed-chevron,
+.main-coverSlotExpandedCollapseButton-collapseButton svg,
+.main-coverSlotExpandedCollapseButton-chevron {
+  pointer-events: none !important;
+}
+
+.main-coverSlotExpanded-container {
+  z-index: var(--fm-layer-cover-expanded) !important;
+  pointer-events: auto !important;
+  isolation: isolate;
+  max-width: min(var(--fm-expanded-cover-size), calc(100vw - 48px));
+  max-height: min(var(--fm-expanded-cover-size), calc(100vh - 150px));
+}
+
+.main-coverSlotExpanded-container,
+.main-coverSlotExpanded-container *,
+.main-coverSlotExpanded-container .cover-art,
+.main-coverSlotExpanded-container img {
+  pointer-events: auto !important;
+}
+
+.main-coverSlotExpanded-container .cover-art,
+.main-coverSlotExpanded-container img {
+  max-width: 100%;
+  max-height: 100%;
+}
+
+/* Right sidebar: remove containers opacos que piscam preto durante rerender/hover. */
+.Root__right-sidebar aside,
+.Root__right-sidebar [class*="NowPlayingView"],
+.Root__right-sidebar .main-nowPlayingView-mainWrapper,
+.Root__right-sidebar .main-nowPlayingView-content,
+.Root__right-sidebar .main-nowPlayingView-content.main-nowPlayingView-gradient,
+.Root__right-sidebar [data-overlayscrollbars],
+.Root__right-sidebar [data-overlayscrollbars-viewport],
+.Root__right-sidebar [data-overlayscrollbars-contents],
+.Root__right-sidebar [aria-hidden="true"],
+.Root__right-sidebar [aria-hidden="true"] > *,
+.main-nowPlayingBar-container,
+.main-nowPlayingBar-nowPlayingBar,
+.main-nowPlayingBar-left,
+.main-nowPlayingBar-center,
+.main-nowPlayingBar-right,
+.main-nowPlayingWidget-nowPlaying {
+  background: transparent !important;
+  background-color: transparent !important;
+  background-image: none !important;
+}
+
+.Root__right-sidebar:has(div[aria-hidden="true"]),
+.Root__right-sidebar:has(aside[aria-hidden="true"]) {
+  background: transparent !important;
+  box-shadow: none !important;
+  border-color: transparent !important;
+}
+
+/* Classes internas conhecidas do Spotify que criam faixa preta na sidebar fechada. */
+.UQRh5VQzvqcMfTje1JUe.tLZZlY6dyQ31AIGTg_AF > *,
+.LO4qETPsZnDBbeRptb_l.J48cLGRUDKjPDyApbN9h::before,
+.x81eiLoZ5zWkSS1y28Oj,
+.npv-background-image__overlay,
+.main-nowPlayingView-gradient,
+.main-nowPlayingView-contextItemInfo::before {
+  background: transparent !important;
+  background-color: transparent !important;
+  background-image: none !important;
+}
+
+.Root__right-sidebar button,
+.Root__right-sidebar [role="button"],
+.Root__right-sidebar a,
+.Root__right-sidebar input {
+  position: relative;
+  z-index: 6;
+  pointer-events: auto !important;
+}
+
+/* Now Playing / Cinema: evita right sidebar vazia por cima e vazamento de fundos. */
+.Root__cinema-view,
+.Root__lyrics-cinema,
+#lyrics-fullscreen-container {
+  position: relative;
+  z-index: var(--fm-layer-cinema) !important;
+  isolation: isolate;
+}
+
+.Root__cinema-view,
+.Root__cinema-view video,
+.Root__lyrics-cinema {
+  background: transparent !important;
+}
+
+.Root__top-container:has(.Root__cinema-view) .Root__right-sidebar aside.NowPlayingView,
+.Root__top-container:has(.Root__cinema-view) .Root__right-sidebar .main-nowPlayingView-mainWrapper,
+.Root__top-container:has(.Root__cinema-view) .Root__right-sidebar .main-nowPlayingView-content {
+  display: none !important;
+}
+
+.Root__top-container:has(.Root__cinema-view) .Root__main-view {
+  z-index: var(--fm-layer-cinema) !important;
+}
+
+body:has(div#lyrics-fullscreen-container) .Root__top-container > *:not(.Root__main-view),
+body:has(div#lyrics-fullscreen-container) .Root__main-view > *:not(.main-view-container),
+body:has(div#lyrics-fullscreen-container) .main-view-container > *:not(#lyrics-fullscreen-container) {
+  pointer-events: none !important;
+}
+
+/* Popups/modais sempre acima das janelas de vidro. */
+div#context-menu,
+.main-contextMenu-tippy,
+.main-contextMenu-menu,
+.main-popper-container,
+.GenericModal__overlay,
+[data-tippy-root],
+.Dropdown-menu,
+.notistack-Snackbar {
+  z-index: var(--fm-layer-popover) !important;
+  pointer-events: auto !important;
+}
+
+/* Overlays visuais padrao do Spotify que brigam com temas transparentes. */
+.main-topBar-background,
+.main-topBar-overlay,
+.main-actionBarBackground-background,
+.playlist-playlist-actionBarBackground-background,
+.playlist-playlist-playlistContent,
+.main-entityHeader-overlay,
+.main-entityHeader-backgroundColor,
+.main-entityHeader-background.main-entityHeader-overlay,
+.x-actionBarBackground-background,
+.x-entityHeader-overlay,
+.under-main-view,
+.under-main-view > div {
+  background: transparent !important;
+  background-color: transparent !important;
+  background-image: none !important;
+}
+
+/* Garante que hover pseudo-elements de cards nao criem placas opacas. */
+.e-9921-box--interactive:hover::after,
+.e-9921-box--hover-custom.e-9921-box--interactive:hover::after,
+.e-91000-box--interactive:hover::after,
+.e-91000-box--hover-custom.e-91000-box--interactive:hover::after {
+  background: transparent !important;
+}
+
+@media (max-width: 900px) {
+  :root {
+    --fm-expanded-cover-size: clamp(180px, 52vmin, 320px);
+  }
+
+  .Root__nav-bar,
+  #Desktop_LeftSidebar_Id,
+  .Root__right-sidebar {
+    z-index: var(--fm-layer-left-sidebar-expanded) !important;
+  }
+}
