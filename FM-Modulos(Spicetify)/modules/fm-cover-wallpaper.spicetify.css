@@ -5,7 +5,11 @@
  */
 
 :root {
-  --fm-wallpaper-image: var(--fm-cover-url, var(--image_url, none));
+  --fm-flashbang-wallpaper: url("https://files.catbox.moe/44fu7x.jpg");
+
+  --fm-wallpaper-image-normal: var(--fm-cover-url, var(--image_url, none));
+  --fm-wallpaper-image: var(--fm-wallpaper-image-normal);
+
   --fm-wallpaper-opacity: 0.82;
   --fm-wallpaper-blur: 24px;
   --fm-wallpaper-brightness: 0.78;
