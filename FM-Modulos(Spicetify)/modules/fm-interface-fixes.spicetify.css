@@ -21,6 +21,8 @@
   --fm-layer-cinema: 90;
   --fm-layer-popover: 1000;
   --fm-expanded-cover-size: clamp(220px, 38vmin, 420px);
+  --fm-compact-library-width: 58px;
+  --fm-compact-library-art-size: 38px;
 }
 
 .Root,
@@ -124,6 +126,157 @@
   pointer-events: auto !important;
 }
 
+.main-yourLibraryX-header,
+.main-yourLibraryX-filterArea,
+.main-yourLibraryX-libraryFilter,
+.main-yourLibraryX-searchFilterContent {
+  position: relative;
+  z-index: 12 !important;
+}
+
+.main-yourLibraryX-libraryContainer,
+.main-yourLibraryX-libraryRootlist,
+.main-rootlist-wrapper {
+  position: relative;
+  z-index: 2;
+  min-width: 0;
+}
+
+.main-yourLibraryX-listItem,
+.main-rootlist-wrapper [role="row"] {
+  min-width: 0;
+}
+
+.main-yourLibraryX-listRowTitle,
+.main-yourLibraryX-listRowSubtitle,
+.main-rootlist-wrapper .LineClamp {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.main-yourLibraryX-entryPoints:has(.main-yourLibraryX-libraryContainer) {
+  overflow: hidden !important;
+}
+
+/* Library compacta: vira coluna de icones de verdade em vez de comprimir a lista. */
+.Root__nav-bar:has(.main-yourLibraryX-libraryIsCollapsed),
+.Root__nav-bar:has(.main-yourLibraryX-iconOnly),
+#Desktop_LeftSidebar_Id:has(.main-yourLibraryX-libraryIsCollapsed),
+#Desktop_LeftSidebar_Id:has(.main-yourLibraryX-iconOnly) {
+  width: var(--fm-compact-library-width) !important;
+  min-width: var(--fm-compact-library-width) !important;
+  max-width: var(--fm-compact-library-width) !important;
+  overflow: visible !important;
+}
+
+.Root__nav-bar:has(.main-yourLibraryX-libraryIsCollapsed) .main-yourLibraryX-entryPoints,
+.Root__nav-bar:has(.main-yourLibraryX-iconOnly) .main-yourLibraryX-entryPoints,
+#Desktop_LeftSidebar_Id:has(.main-yourLibraryX-libraryIsCollapsed) .main-yourLibraryX-entryPoints,
+#Desktop_LeftSidebar_Id:has(.main-yourLibraryX-iconOnly) .main-yourLibraryX-entryPoints {
+  width: var(--fm-compact-library-width) !important;
+  min-width: var(--fm-compact-library-width) !important;
+  padding: 8px 4px !important;
+  overflow: hidden !important;
+}
+
+.Root__nav-bar:has(.main-yourLibraryX-libraryIsCollapsed) .main-yourLibraryX-header,
+.Root__nav-bar:has(.main-yourLibraryX-iconOnly) .main-yourLibraryX-header,
+#Desktop_LeftSidebar_Id:has(.main-yourLibraryX-libraryIsCollapsed) .main-yourLibraryX-header,
+#Desktop_LeftSidebar_Id:has(.main-yourLibraryX-iconOnly) .main-yourLibraryX-header {
+  justify-content: center !important;
+  padding-inline: 0 !important;
+}
+
+.Root__nav-bar:has(.main-yourLibraryX-libraryIsCollapsed) .main-yourLibraryX-headerContent,
+.Root__nav-bar:has(.main-yourLibraryX-libraryIsCollapsed) .main-yourLibraryX-navItems,
+.Root__nav-bar:has(.main-yourLibraryX-libraryIsCollapsed) .main-yourLibraryX-filterArea,
+.Root__nav-bar:has(.main-yourLibraryX-libraryIsCollapsed) .main-yourLibraryX-libraryFilter,
+.Root__nav-bar:has(.main-yourLibraryX-libraryIsCollapsed) .main-yourLibraryX-listRowTitle,
+.Root__nav-bar:has(.main-yourLibraryX-libraryIsCollapsed) .main-yourLibraryX-listRowSubtitle,
+.Root__nav-bar:has(.main-yourLibraryX-libraryIsCollapsed) .main-rootlist-statusIcons,
+.Root__nav-bar:has(.main-yourLibraryX-iconOnly) .main-yourLibraryX-headerContent,
+.Root__nav-bar:has(.main-yourLibraryX-iconOnly) .main-yourLibraryX-navItems,
+.Root__nav-bar:has(.main-yourLibraryX-iconOnly) .main-yourLibraryX-filterArea,
+.Root__nav-bar:has(.main-yourLibraryX-iconOnly) .main-yourLibraryX-libraryFilter,
+.Root__nav-bar:has(.main-yourLibraryX-iconOnly) .main-yourLibraryX-listRowTitle,
+.Root__nav-bar:has(.main-yourLibraryX-iconOnly) .main-yourLibraryX-listRowSubtitle,
+.Root__nav-bar:has(.main-yourLibraryX-iconOnly) .main-rootlist-statusIcons {
+  display: none !important;
+}
+
+:is(.Root__nav-bar, #Desktop_LeftSidebar_Id):has(.main-yourLibraryX-libraryIsCollapsed) .main-yourLibraryX-headerContent,
+:is(.Root__nav-bar, #Desktop_LeftSidebar_Id):has(.main-yourLibraryX-libraryIsCollapsed) .main-yourLibraryX-navItems,
+:is(.Root__nav-bar, #Desktop_LeftSidebar_Id):has(.main-yourLibraryX-libraryIsCollapsed) .main-yourLibraryX-filterArea,
+:is(.Root__nav-bar, #Desktop_LeftSidebar_Id):has(.main-yourLibraryX-libraryIsCollapsed) .main-yourLibraryX-libraryFilter,
+:is(.Root__nav-bar, #Desktop_LeftSidebar_Id):has(.main-yourLibraryX-libraryIsCollapsed) .main-yourLibraryX-listRowTitle,
+:is(.Root__nav-bar, #Desktop_LeftSidebar_Id):has(.main-yourLibraryX-libraryIsCollapsed) .main-yourLibraryX-listRowSubtitle,
+:is(.Root__nav-bar, #Desktop_LeftSidebar_Id):has(.main-yourLibraryX-libraryIsCollapsed) .main-rootlist-statusIcons,
+:is(.Root__nav-bar, #Desktop_LeftSidebar_Id):has(.main-yourLibraryX-iconOnly) .main-yourLibraryX-headerContent,
+:is(.Root__nav-bar, #Desktop_LeftSidebar_Id):has(.main-yourLibraryX-iconOnly) .main-yourLibraryX-navItems,
+:is(.Root__nav-bar, #Desktop_LeftSidebar_Id):has(.main-yourLibraryX-iconOnly) .main-yourLibraryX-filterArea,
+:is(.Root__nav-bar, #Desktop_LeftSidebar_Id):has(.main-yourLibraryX-iconOnly) .main-yourLibraryX-libraryFilter,
+:is(.Root__nav-bar, #Desktop_LeftSidebar_Id):has(.main-yourLibraryX-iconOnly) .main-yourLibraryX-listRowTitle,
+:is(.Root__nav-bar, #Desktop_LeftSidebar_Id):has(.main-yourLibraryX-iconOnly) .main-yourLibraryX-listRowSubtitle,
+:is(.Root__nav-bar, #Desktop_LeftSidebar_Id):has(.main-yourLibraryX-iconOnly) .main-rootlist-statusIcons {
+  display: none !important;
+}
+
+.Root__nav-bar:has(.main-yourLibraryX-libraryIsCollapsed) .main-yourLibraryX-libraryRootlist,
+.Root__nav-bar:has(.main-yourLibraryX-iconOnly) .main-yourLibraryX-libraryRootlist,
+#Desktop_LeftSidebar_Id:has(.main-yourLibraryX-libraryIsCollapsed) .main-yourLibraryX-libraryRootlist,
+#Desktop_LeftSidebar_Id:has(.main-yourLibraryX-iconOnly) .main-yourLibraryX-libraryRootlist {
+  padding: 0 !important;
+}
+
+.Root__nav-bar:has(.main-yourLibraryX-libraryIsCollapsed) .main-rootlist-wrapper [role="row"],
+.Root__nav-bar:has(.main-yourLibraryX-iconOnly) .main-rootlist-wrapper [role="row"],
+#Desktop_LeftSidebar_Id:has(.main-yourLibraryX-libraryIsCollapsed) .main-rootlist-wrapper [role="row"],
+#Desktop_LeftSidebar_Id:has(.main-yourLibraryX-iconOnly) .main-rootlist-wrapper [role="row"] {
+  width: calc(var(--fm-compact-library-width) - 10px) !important;
+  min-width: calc(var(--fm-compact-library-width) - 10px) !important;
+  height: 48px !important;
+  min-height: 48px !important;
+  padding: 4px !important;
+  margin-inline: auto !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  overflow: hidden !important;
+}
+
+.Root__nav-bar:has(.main-yourLibraryX-libraryIsCollapsed) .main-rootlist-wrapper [role="row"] > *,
+.Root__nav-bar:has(.main-yourLibraryX-iconOnly) .main-rootlist-wrapper [role="row"] > *,
+#Desktop_LeftSidebar_Id:has(.main-yourLibraryX-libraryIsCollapsed) .main-rootlist-wrapper [role="row"] > *,
+#Desktop_LeftSidebar_Id:has(.main-yourLibraryX-iconOnly) .main-rootlist-wrapper [role="row"] > * {
+  flex: 0 0 auto !important;
+}
+
+.Root__nav-bar:has(.main-yourLibraryX-libraryIsCollapsed) .main-rootlist-wrapper [role="row"] img,
+.Root__nav-bar:has(.main-yourLibraryX-libraryIsCollapsed) .x-entityImage-imageContainer,
+.Root__nav-bar:has(.main-yourLibraryX-libraryIsCollapsed) .main-yourLibraryX-rowCover,
+.Root__nav-bar:has(.main-yourLibraryX-iconOnly) .main-rootlist-wrapper [role="row"] img,
+.Root__nav-bar:has(.main-yourLibraryX-iconOnly) .x-entityImage-imageContainer,
+.Root__nav-bar:has(.main-yourLibraryX-iconOnly) .main-yourLibraryX-rowCover {
+  width: var(--fm-compact-library-art-size) !important;
+  height: var(--fm-compact-library-art-size) !important;
+  min-width: var(--fm-compact-library-art-size) !important;
+  border-radius: 6px !important;
+}
+
+#Desktop_LeftSidebar_Id:has(.main-yourLibraryX-libraryIsCollapsed) .main-rootlist-wrapper [role="row"] img,
+#Desktop_LeftSidebar_Id:has(.main-yourLibraryX-libraryIsCollapsed) .x-entityImage-imageContainer,
+#Desktop_LeftSidebar_Id:has(.main-yourLibraryX-libraryIsCollapsed) .main-yourLibraryX-rowCover,
+#Desktop_LeftSidebar_Id:has(.main-yourLibraryX-iconOnly) .main-rootlist-wrapper [role="row"] img,
+#Desktop_LeftSidebar_Id:has(.main-yourLibraryX-iconOnly) .x-entityImage-imageContainer,
+#Desktop_LeftSidebar_Id:has(.main-yourLibraryX-iconOnly) .main-yourLibraryX-rowCover {
+  width: var(--fm-compact-library-art-size) !important;
+  height: var(--fm-compact-library-art-size) !important;
+  min-width: var(--fm-compact-library-art-size) !important;
+  border-radius: 6px !important;
+}
+
 /* Resizers precisam ficar clicaveis mesmo com bordas/vidro por cima. */
 .LayoutResizer__resize-bar,
 .LayoutResizer__input,
@@ -186,11 +339,13 @@
 }
 
 .main-coverSlotExpanded-container {
+  position: fixed !important;
   z-index: var(--fm-layer-cover-expanded) !important;
   pointer-events: auto !important;
   isolation: isolate;
   max-width: min(var(--fm-expanded-cover-size), calc(100vw - 48px));
   max-height: min(var(--fm-expanded-cover-size), calc(100vh - 150px));
+  overflow: visible !important;
 }
 
 .main-coverSlotExpanded-container,
@@ -271,6 +426,10 @@
   background: transparent !important;
 }
 
+.Root__top-container:has(.Root__cinema-view) > .Root__right-sidebar {
+  display: none !important;
+}
+
 .Root__top-container:has(.Root__cinema-view) .Root__right-sidebar aside.NowPlayingView,
 .Root__top-container:has(.Root__cinema-view) .Root__right-sidebar .main-nowPlayingView-mainWrapper,
 .Root__top-container:has(.Root__cinema-view) .Root__right-sidebar .main-nowPlayingView-content {
@@ -279,6 +438,21 @@
 
 .Root__top-container:has(.Root__cinema-view) .Root__main-view {
   z-index: var(--fm-layer-cinema) !important;
+}
+
+.Root__top-container:has(.Root__cinema-view) .Root__nav-bar,
+.Root__top-container:has(.Root__cinema-view) #Desktop_LeftSidebar_Id {
+  z-index: var(--fm-layer-left-sidebar) !important;
+}
+
+.Root__top-container:has(.Root__cinema-view) .main-view-container {
+  overflow: hidden !important;
+}
+
+.Root__top-container:has(.Root__cinema-view) .main-nowPlayingWidget-coverExpanded,
+.Root__top-container:has(.Root__cinema-view) .Root__nav-bar .main-coverSlotExpanded-container,
+.Root__top-container:has(.Root__cinema-view) #Desktop_LeftSidebar_Id .main-coverSlotExpanded-container {
+  display: none !important;
 }
 
 body:has(div#lyrics-fullscreen-container) .Root__top-container > *:not(.Root__main-view),
