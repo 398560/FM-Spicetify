@@ -1,0 +1,1092 @@
+/**
+ * @name FM Aero Glass
+ * @author Plague Doctor
+ * @description Módulo de vidro fosco estilo Windows Aero para Spicetify
+ *              Funciona standalone ou junto com temas como Hazy
+ * @version 2.0.0
+ *
+ * ─── COMO USAR ────────────────────────────────────────────────────────────────
+ *  Standalone: adicione no Custom CSS do Spicetify Marketplace
+ *  Com Hazy:   adicione DEPOIS do import do Hazy
+ *  Com outros: funciona em qualquer tema com fundo transparente/imagem
+ * ──────────────────────────────────────────────────────────────────────────────
+ *
+ * ─── ÍNDICE ───────────────────────────────────────────────────────────────────
+ *  1. Variáveis & Config
+ *  2. Keyframes
+ *  3. Painel Esquerdo (nav / biblioteca)
+ *  4. Barra Superior (top bar)
+ *  5. Área Principal (main view)
+ *  6. Barra Inferior (now playing bar)
+ *  7. Sidebar Direita (now playing view)
+ *  8. Modais & Popups
+ *  9. Menus de Contexto
+ * 10. Cards & Listas
+ * 11. Scrollbar
+ * 12. Detalhes & Brilhos
+ * ──────────────────────────────────────────────────────────────────────────────
+ */
+
+/* ============================================================
+   1. VARIÁVEIS & CONFIG
+   Altere aqui para customizar sem tocar no resto.
+   ============================================================ */
+:root {
+  /* — Intensidade do efeito de vidro — */
+  --ag-blur:       22px;          /* desfoque principal          */
+  --ag-blur-heavy: 32px;          /* desfoque em modais          */
+  --ag-blur-light: 14px;          /* desfoque em elementos leves */
+  --ag-saturate:   160%;          /* vivacidade do conteúdo atrás */
+
+  /* — Camadas de vidro (do mais claro ao mais escuro) — */
+  --ag-glass-0: rgba(255, 255, 255, 0.00);  /* invisível            */
+  --ag-glass-1: rgba(255, 255, 255, 0.05);  /* reflexo muito leve   */
+  --ag-glass-2: rgba(255, 255, 255, 0.08);  /* corpo do vidro       */
+  --ag-glass-3: rgba(255, 255, 255, 0.11);  /* vidro mais presente  */
+  --ag-dark-1:  rgba(0,   0,   0,   0.18);  /* escurecimento leve   */
+  --ag-dark-2:  rgba(0,   0,   0,   0.28);  /* escurecimento médio  */
+  --ag-dark-3:  rgba(0,   0,   0,   0.42);  /* escurecimento forte  */
+  --ag-dark-4:  rgba(0,   0,   0,   0.58);  /* modais               */
+
+  /* — Bordas de vidro — */
+  --ag-border-top:  rgba(255, 255, 255, 0.22);  /* borda superior (reflexo) */
+  --ag-border-side: rgba(255, 255, 255, 0.10);  /* borda lateral            */
+  --ag-border-bot:  rgba(0,   0,   0,   0.20);  /* borda inferior (sombra)  */
+
+  /* — Sombras — */
+  --ag-shadow-sm: 0 2px 8px  rgba(0, 0, 0, 0.25);
+  --ag-shadow-md: 0 4px 18px rgba(0, 0, 0, 0.35);
+  --ag-shadow-lg: 0 8px 36px rgba(0, 0, 0, 0.50);
+
+  /* — Reflexo de superfície (linha de luz no topo) — */
+  --ag-sheen: linear-gradient(
+    90deg,
+    transparent        0%,
+    rgba(255,255,255,0.18) 25%,
+    rgba(255,255,255,0.30) 50%,
+    rgba(255,255,255,0.18) 75%,
+    transparent        100%
+  );
+
+  /* — Borda estilo Aero — */
+  --ag-frame: 1px solid var(--ag-border-side);
+
+  /* — Accent padrão (usa o do tema se disponível) — */
+  --ag-accent: var(--spice-button, rgba(100, 180, 255, 0.9));
+  --ag-accent-glow: rgba(100, 180, 255, 0.22);
+
+  /* — Arredondamento — */
+  --ag-radius: var(--button-border, 8px);
+  --ag-radius-lg: 12px;
+
+  /* — Velocidade de transição — */
+  --ag-ease: cubic-bezier(0.22, 0.61, 0.36, 1);
+  --ag-dur:  0.22s;
+}
+
+
+/* ============================================================
+   2. KEYFRAMES
+   ============================================================ */
+
+/* Entrada de painéis laterais */
+@keyframes ag-panel-in {
+  from { opacity: 0; transform: translateX(-6px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+
+/* Entrada de modais */
+@keyframes ag-modal-in {
+  from { opacity: 0; transform: scale(0.96) translateY(8px); }
+  to   { opacity: 1; transform: scale(1)    translateY(0); }
+}
+
+/* Entrada de menus de contexto */
+@keyframes ag-menu-in {
+  from { opacity: 0; transform: scale(0.95) translateY(-4px); }
+  to   { opacity: 1; transform: scale(1)    translateY(0); }
+}
+
+/* Entrada de cards */
+@keyframes ag-card-in {
+  from { opacity: 0; transform: translateY(8px) scale(0.98); }
+  to   { opacity: 1; transform: translateY(0)   scale(1); }
+}
+
+/* Reflexo pulsante suave — barra inferior */
+@keyframes ag-sheen-pulse {
+  0%,100% { opacity: 0.6; }
+  50%     { opacity: 1.0; }
+}
+
+
+/* ============================================================
+   3. PAINEL ESQUERDO — Navegação & Biblioteca
+   ============================================================ */
+
+/*
+ * Fundo principal da nav esquerda.
+ * backdrop-filter pega o conteúdo de fundo (wallpaper/album art).
+ */
+.Root__nav-bar,
+.WBFaUw_oOfN2m4aTxggt,                   /* classe alternativa nav-bar ≥1.2.75 */
+.TkqXOzhmCCuE6YI3hlgA,
+#Desktop_LeftSidebar_Id {
+  background: var(--ag-dark-1) !important;
+  backdrop-filter: blur(var(--ag-blur)) saturate(var(--ag-saturate)) !important;
+  -webkit-backdrop-filter: blur(var(--ag-blur)) saturate(var(--ag-saturate)) !important;
+  border-right: var(--ag-frame) !important;
+  box-shadow:
+    inset -1px 0 0 var(--ag-border-bot),
+    var(--ag-shadow-sm) !important;
+  position: relative;
+  animation: ag-panel-in 0.3s var(--ag-ease) both;
+}
+
+/* Biblioteca — container de playlists/podcasts */
+.main-yourLibraryX-entryPoints {
+  background: transparent !important;
+}
+
+.main-yourLibraryX-libraryContainer {
+  background: transparent !important;
+}
+
+/* Items da biblioteca com hover vidro */
+.main-rootlist-wrapper [role="row"]:hover,
+.main-rootlist-wrapper [role="row"]:focus-within {
+  background: var(--ag-glass-2) !important;
+  backdrop-filter: blur(var(--ag-blur-light)) !important;
+  border-radius: var(--ag-radius) !important;
+  transition: background var(--ag-dur) var(--ag-ease) !important;
+}
+
+/* Linha de luz no topo da nav */
+.Root__nav-bar::before,
+.WBFaUw_oOfN2m4aTxggt::before {
+  content: '';
+  pointer-events: none;
+  position: absolute;
+  top: 0; left: 10%; right: 10%;
+  height: 1px;
+  background: var(--ag-sheen);
+  opacity: 0.7;
+  z-index: 10;
+}
+
+/* Expanded left sidebar */
+#Desktop_LeftSidebar_Id.yXlTmwjWtDebsivA1gM6,
+#Desktop_LeftSidebar_Id[class*="expanded"] {
+  background: var(--ag-dark-2) !important;
+  backdrop-filter: blur(var(--ag-blur)) saturate(var(--ag-saturate)) !important;
+}
+
+
+/* ============================================================
+   4. BARRA SUPERIOR — Top Bar / Global Nav
+   ============================================================ */
+
+/*
+ * Barra de navegação superior.
+ * Usa blur menor para dar leveza visual.
+ */
+.Root__globalNav,
+.main-topBar-container,
+.main-topBar-background,
+.control-nav .main-topBar-container {
+  background: var(--ag-dark-1) !important;
+  backdrop-filter: blur(var(--ag-blur)) saturate(var(--ag-saturate)) !important;
+  -webkit-backdrop-filter: blur(var(--ag-blur)) saturate(var(--ag-saturate)) !important;
+  border-bottom: var(--ag-frame) !important;
+  box-shadow:
+    inset 0 -1px 0 var(--ag-border-bot),
+    inset 0  1px 0 var(--ag-border-top),
+    var(--ag-shadow-sm) !important;
+}
+
+/* Remove fundo extra no topbar blur */
+.main-topBar-background {
+  background: transparent !important;
+  backdrop-filter: none !important;
+}
+
+.main-topBar-overlay,
+.hIFR8WDm_54EEIa1gwpC,
+.mjZrvVI3CxfHJXu7y0Lg {
+  background: transparent !important;
+  opacity: 0 !important;
+}
+
+/* Botões na top bar com visual de vidro */
+.Root__globalNav button,
+.Root__globalNav .main-globalNav-link-icon,
+.main-topBar-historyButtons .main-topBar-button,
+.WtC1lGbmQRplD6JBhNFU,
+.main-topBar-buddyFeed,
+.main-topBar-whatsNewFeed,
+.main-userWidget-boxCondensed {
+  background: var(--ag-glass-2) !important;
+  backdrop-filter: blur(var(--ag-blur-light)) !important;
+  border: var(--ag-frame) !important;
+  border-radius: var(--ag-radius) !important;
+  box-shadow:
+    inset 0 1px 0 var(--ag-border-top),
+    var(--ag-shadow-sm) !important;
+  transition:
+    background  var(--ag-dur) var(--ag-ease),
+    box-shadow  var(--ag-dur) var(--ag-ease),
+    transform   var(--ag-dur) var(--ag-ease) !important;
+}
+
+.Root__globalNav button:hover,
+.main-topBar-buddyFeed:hover,
+.main-topBar-whatsNewFeed:hover,
+.main-userWidget-boxCondensed:hover,
+.main-userWidget-boxCondensed:focus-visible,
+.main-userWidget-boxCondensed[data-context-menu-open="true"],
+.Fxnb0xe6bL7I7W8V0p6C,
+.SFgYidQmrqrFEVh65Zrg,
+.SFgYidQmrqrFEVh65Zrg:hover {
+  background: var(--ag-glass-3) !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.28),
+    0 0 12px var(--ag-accent-glow),
+    var(--ag-shadow-md) !important;
+  transform: translateY(-1px) !important;
+}
+
+/* Barra de pesquisa */
+.x-searchInput-searchInputInput,
+.main-globalNav-searchInputContainer input,
+.NtkAQg9R1r5CjuP0XHwl,
+.main-globalNav-searchContainer button,
+.main-globalNav-searchContainer .main-topBar-searchBar {
+  background: var(--ag-dark-2) !important;
+  backdrop-filter: blur(var(--ag-blur-light)) !important;
+  border: var(--ag-frame) !important;
+  border-radius: var(--ag-radius) !important;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.06) !important;
+  transition: box-shadow var(--ag-dur) var(--ag-ease) !important;
+}
+
+.x-searchInput-searchInputInput:hover {
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.08),
+    0 0 0 1px rgba(255,255,255,0.12) !important;
+}
+
+.x-searchInput-searchInputInput:focus,
+.main-globalNav-searchInputContainer input:focus {
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.10),
+    0 0 0 2px rgba(255,255,255,0.15),
+    0 0 12px var(--ag-accent-glow) !important;
+}
+
+
+/* ============================================================
+   5. ÁREA PRINCIPAL — Main View
+   ============================================================ */
+
+/*
+ * Container principal. Fundo semitransparente escuro para
+ * criar profundidade sobre o wallpaper/album art de fundo.
+ */
+.Root__main-view {
+  background: var(--ag-dark-1) !important;
+  backdrop-filter: blur(var(--ag-blur-light)) saturate(var(--ag-saturate)) !important;
+  -webkit-backdrop-filter: blur(var(--ag-blur-light)) saturate(var(--ag-saturate)) !important;
+  border: var(--ag-frame) !important;
+  border-radius: var(--ag-radius-lg) !important;
+  box-shadow:
+    inset 0 1px 0 var(--ag-border-top),
+    var(--ag-shadow-md) !important;
+  overflow: hidden;
+}
+
+/* Track list header sticky */
+.main-trackList-trackListHeader {
+  background: var(--ag-dark-2) !important;
+  backdrop-filter: blur(var(--ag-blur)) !important;
+  border-bottom: var(--ag-frame) !important;
+  box-shadow: inset 0 -1px 0 var(--ag-border-bot) !important;
+}
+
+/* Linha de track: hover com vidro */
+.main-trackList-trackListRow:hover,
+.main-trackList-trackListRow:focus-within {
+  background: var(--ag-glass-2) !important;
+  backdrop-filter: blur(var(--ag-blur-light)) !important;
+  border-radius: var(--ag-radius) !important;
+  transition: background var(--ag-dur) var(--ag-ease) !important;
+}
+
+/* Track selecionada */
+.main-trackList-selected {
+  background: var(--ag-glass-3) !important;
+  backdrop-filter: blur(var(--ag-blur-light)) !important;
+  border-radius: var(--ag-radius) !important;
+  box-shadow: inset 0 0 0 1px rgba(255,255,255,0.12) !important;
+}
+
+/* Playlist content area */
+.playlist-playlist-playlistContent,
+.playlist-playlist-actionBarBackground-background,
+.main-actionBarBackground-background {
+  background: transparent !important;
+}
+
+/* Entity header (artist/playlist banner) */
+.main-entityHeader-background.main-entityHeader-overlay,
+.main-entityHeader-backgroundColor,
+.main-entityHeader-withBackgroundImage {
+  background: transparent !important;
+}
+
+/* Topbar title background */
+.main-topBar-withBackgroundBlur:before {
+  display: none;
+}
+
+/* Home shortcuts grid */
+.view-homeShortcutsGrid-shortcut {
+  background: var(--ag-dark-2) !important;
+  backdrop-filter: blur(var(--ag-blur)) saturate(var(--ag-saturate)) !important;
+  -webkit-backdrop-filter: blur(var(--ag-blur)) saturate(var(--ag-saturate)) !important;
+  border: var(--ag-frame) !important;
+  border-radius: var(--ag-radius) !important;
+  box-shadow:
+    inset 0 1px 0 var(--ag-border-top),
+    var(--ag-shadow-sm) !important;
+  transition:
+    transform   var(--ag-dur) var(--ag-ease),
+    box-shadow  var(--ag-dur) var(--ag-ease),
+    background  var(--ag-dur) var(--ag-ease) !important;
+}
+
+.view-homeShortcutsGrid-shortcut:hover,
+.view-homeShortcutsGrid-shortcut:focus-within,
+.view-homeShortcutsGrid-shortcut[data-context-menu-open="true"] {
+  background: var(--ag-glass-3) !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.22),
+    0 0 14px var(--ag-accent-glow),
+    var(--ag-shadow-md) !important;
+  transform: scale(1.02) translateY(-1px) !important;
+}
+
+/* Cards (álbuns, artistas, playlists) */
+.main-card-card,
+.hZjAwWMA54TvbGYwReET,
+.XkDqS8M3CEkouTbj8y5H,
+.e-9921-box--hover-custom.e-9921-box--interactive,
+.e-91000-box--hover-custom.e-91000-box--interactive {
+  background: var(--ag-dark-2) !important;
+  backdrop-filter: blur(var(--ag-blur-light)) saturate(var(--ag-saturate)) !important;
+  -webkit-backdrop-filter: blur(var(--ag-blur-light)) saturate(var(--ag-saturate)) !important;
+  border: var(--ag-frame) !important;
+  border-radius: var(--ag-radius) !important;
+  box-shadow:
+    inset 0 1px 0 var(--ag-border-top),
+    var(--ag-shadow-sm) !important;
+  transition:
+    transform   var(--ag-dur) var(--ag-ease),
+    box-shadow  var(--ag-dur) var(--ag-ease),
+    background  var(--ag-dur) var(--ag-ease) !important;
+  animation: ag-card-in 0.28s var(--ag-ease) both;
+}
+
+.main-card-card:hover,
+.main-card-card[data-context-menu-open="true"],
+.hZjAwWMA54TvbGYwReET:hover,
+.XkDqS8M3CEkouTbj8y5H:hover {
+  background: var(--ag-glass-2) !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.20),
+    0 0 16px var(--ag-accent-glow),
+    var(--ag-shadow-md) !important;
+}
+
+/* Remove hover tint padrão do encore */
+.e-9921-box--interactive.e-9921-box--contrasting:hover,
+.e-9921-box--interactive:hover:after,
+.e-9921-box--hover-custom.e-9921-box--interactive:hover:after,
+.e-91000-box--interactive.e-91000-box--contrasting:hover,
+.e-91000-box--interactive:hover:after,
+.e-91000-box--hover-custom.e-91000-box--interactive:hover:after {
+  background: none !important;
+}
+
+/* Hero card (now playing / search) */
+.main-heroCard-card {
+  background: var(--ag-dark-2) !important;
+  backdrop-filter: blur(var(--ag-blur-light)) !important;
+  border: var(--ag-frame) !important;
+  border-radius: var(--ag-radius) !important;
+}
+
+.main-heroCard-card:hover {
+  background: var(--ag-glass-2) !important;
+}
+
+
+/* ============================================================
+   6. BARRA INFERIOR — Now Playing Bar
+   ============================================================ */
+
+/*
+ * A barra mais importante visualmente.
+ * Recebe o efeito de vidro mais elaborado com reflexo no topo.
+ */
+.Root__now-playing-bar {
+  background: var(--ag-dark-2) !important;
+  backdrop-filter: blur(var(--ag-blur)) saturate(var(--ag-saturate)) !important;
+  -webkit-backdrop-filter: blur(var(--ag-blur)) saturate(var(--ag-saturate)) !important;
+  border: var(--ag-frame) !important;
+  border-top: 1px solid var(--ag-border-top) !important;
+  border-radius: var(--ag-radius) !important;
+  box-shadow:
+    inset 0  1px 0 rgba(255,255,255,0.18),
+    inset 0 -1px 0 var(--ag-border-bot),
+    var(--ag-shadow-lg) !important;
+  position: relative;
+  overflow: visible;
+}
+
+/* Linha de reflexo no topo da barra */
+.Root__now-playing-bar::before {
+  content: '';
+  pointer-events: none;
+  position: absolute;
+  top: 0; left: 8%; right: 8%;
+  height: 1px;
+  background: var(--ag-sheen);
+  animation: ag-sheen-pulse 4s ease-in-out infinite;
+  z-index: 10;
+}
+
+/* Remove o fundo do container interno */
+.main-nowPlayingBar-nowPlayingBar,
+.main-nowPlayingBar-container {
+  background: transparent !important;
+}
+
+/* Progress bar */
+.progress-bar {
+  --bg-color: rgba(255, 255, 255, 0.12);
+}
+
+/* Barra de progresso — trilha */
+.x-progressBar-sliderArea {
+  background: rgba(255,255,255,0.10) !important;
+  backdrop-filter: blur(4px) !important;
+  box-shadow: inset 0 1px 0 rgba(0,0,0,0.2) !important;
+}
+
+/* Botões de controle */
+.main-skipForwardButton-button,
+.main-skipBackButton-button,
+.main-repeatButton-button,
+.main-playPauseButton-button,
+.main-shuffleButton-button,
+.main-addButton-button,
+.main-genericButton-button {
+  transition:
+    transform  var(--ag-dur) var(--ag-ease),
+    filter     var(--ag-dur) var(--ag-ease),
+    background var(--ag-dur) var(--ag-ease) !important;
+}
+
+.main-skipForwardButton-button:hover,
+.main-skipBackButton-button:hover,
+.main-repeatButton-button:hover,
+.main-playPauseButton-button:hover,
+.main-shuffleButton-button:hover {
+  transform: scale(1.12) !important;
+  filter: drop-shadow(0 0 6px rgba(255,255,255,0.3)) !important;
+}
+
+.main-skipForwardButton-button:active,
+.main-skipBackButton-button:active,
+.main-playPauseButton-button:active {
+  transform: scale(0.92) !important;
+  transition-duration: 0.08s !important;
+}
+
+/* Botão expand da capa */
+.main-coverSlotCollapsed-expandButton {
+  background: var(--ag-glass-2) !important;
+  backdrop-filter: blur(var(--ag-blur-light)) !important;
+  border: var(--ag-frame) !important;
+  border-radius: var(--ag-radius) !important;
+  box-shadow: inset 0 1px 0 var(--ag-border-top) !important;
+}
+
+
+/* ============================================================
+   7. SIDEBAR DIREITA — Now Playing View
+   ============================================================ */
+
+.Root__right-sidebar aside,
+.Root__right-sidebar [class*="NowPlayingView"],
+.main-nowPlayingView-content {
+  background: var(--ag-dark-1) !important;
+  backdrop-filter: blur(var(--ag-blur)) saturate(var(--ag-saturate)) !important;
+  -webkit-backdrop-filter: blur(var(--ag-blur)) saturate(var(--ag-saturate)) !important;
+  border-left: var(--ag-frame) !important;
+  box-shadow: inset 1px 0 0 var(--ag-border-top) !important;
+}
+
+/* Seções dentro da now playing view */
+.main-nowPlayingView-section {
+  background: var(--ag-dark-2) !important;
+  backdrop-filter: blur(var(--ag-blur-light)) !important;
+  border: var(--ag-frame) !important;
+  border-radius: var(--ag-radius) !important;
+  box-shadow:
+    inset 0 1px 0 var(--ag-border-top),
+    var(--ag-shadow-sm) !important;
+}
+
+/* Fundo gradiente da now playing view */
+.main-nowPlayingView-content.main-nowPlayingView-gradient {
+  background: transparent !important;
+}
+
+/* "Sobre o artista" */
+.Q8TIE2Y2AX304EkuFSZh,
+.Uw4tcZdmh7s4BMdgCCuu {
+  background: transparent !important;
+}
+
+/* Buddy feed / friend activity */
+.main-buddyFeed-container,
+.ffFwfKcPDbmAPLXzxzKq,
+.UrfDp0_mKGL9hkfh9g_R {
+  background: var(--ag-dark-2) !important;
+  backdrop-filter: blur(var(--ag-blur)) saturate(var(--ag-saturate)) !important;
+  border: var(--ag-frame) !important;
+  border-radius: var(--ag-radius) !important;
+  box-shadow: inset 0 1px 0 var(--ag-border-top) !important;
+}
+
+/* Tab bar (fila/letras) */
+.queue-tabBar-active,
+.lyrics-tabBar-active {
+  background: var(--ag-glass-2) !important;
+  backdrop-filter: blur(var(--ag-blur-light)) !important;
+  border: var(--ag-frame) !important;
+  border-radius: var(--ag-radius) !important;
+}
+
+.queue-tabBar-headerItemLink:hover,
+.lyrics-tabBar-headerItemLink:hover {
+  background: var(--ag-glass-1) !important;
+  border-radius: var(--ag-radius) !important;
+}
+
+
+/* ============================================================
+   8. MODAIS & POPUPS
+   ============================================================ */
+
+/*
+ * Modais com blur pesado — dão sensação de profundidade real.
+ * O backdrop atrás escurece o conteúdo sem cobrir completamente.
+ */
+.GenericModal__overlay > div[role="dialog"],
+.main-trackCreditsModal-container,
+.main-aboutRecsModal-container,
+.main-playlistEditDetailsModal-container,
+.profile-userEditDetails-container,
+.artist-artistAbout-modal,
+.bupRDM6tHHYnfPxEfQ_h,
+dialog.NiqTdDnFi5KAXoGukrdo.aOxbsZDBlepfQptv_EfI,
+dialog.jMkF9P0MOVAsPeHbK88D,
+dialog:has(.main-duplicateTrackModal-container),
+dialog:has(div > button[aria-label="Close"]) {
+  background: var(--ag-dark-3) !important;
+  backdrop-filter: blur(var(--ag-blur-heavy)) saturate(var(--ag-saturate)) !important;
+  -webkit-backdrop-filter: blur(var(--ag-blur-heavy)) saturate(var(--ag-saturate)) !important;
+  border: 1px solid var(--ag-border-side) !important;
+  border-top: 1px solid var(--ag-border-top) !important;
+  border-radius: var(--ag-radius-lg) !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.14),
+    var(--ag-shadow-lg) !important;
+  animation: ag-modal-in 0.25s var(--ag-ease) both !important;
+}
+
+/* Confirmação */
+.main-confirmDialog-container {
+  background: var(--ag-dark-3) !important;
+  backdrop-filter: blur(var(--ag-blur-heavy)) saturate(var(--ag-saturate)) !important;
+  border: 1px solid var(--ag-border-side) !important;
+  border-top: 1px solid var(--ag-border-top) !important;
+  border-radius: var(--ag-radius-lg) !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.14),
+    var(--ag-shadow-lg) !important;
+  animation: ag-modal-in 0.25s var(--ag-ease) both !important;
+}
+
+/* Popper (device picker, etc.) */
+.main-popper-container {
+  background: var(--ag-dark-3) !important;
+  backdrop-filter: blur(var(--ag-blur)) saturate(var(--ag-saturate)) !important;
+  border: var(--ag-frame) !important;
+  border-top: 1px solid var(--ag-border-top) !important;
+  border-radius: var(--ag-radius) !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.12),
+    var(--ag-shadow-lg) !important;
+  animation: ag-modal-in 0.2s var(--ag-ease) both;
+}
+
+/* Popover/anúncio */
+.encore-announcement-set {
+  background: var(--ag-dark-3) !important;
+  backdrop-filter: blur(var(--ag-blur-heavy)) saturate(var(--ag-saturate)) !important;
+  border: var(--ag-frame) !important;
+  border-top: 1px solid var(--ag-border-top) !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.14),
+    var(--ag-shadow-lg) !important;
+}
+
+/* Flecha do popover */
+.yzZ_VZHrZBb3REPcU7tD:before {
+  backdrop-filter: blur(var(--ag-blur-heavy));
+  background: linear-gradient(
+    to bottom right,
+    transparent 50%,
+    rgba(20, 20, 30, 0.55) 50%
+  );
+}
+
+/* Quick search modal */
+.CqXpLitKxRFvrULhC2kW.CJCWzxw0S_yJx0wDlvPQ.BGJFigbt4tZ2RFINF8Xu {
+  background: var(--ag-dark-3) !important;
+  backdrop-filter: blur(var(--ag-blur-heavy)) saturate(var(--ag-saturate)) !important;
+  border: var(--ag-frame) !important;
+  border-top: 1px solid var(--ag-border-top) !important;
+  border-radius: var(--ag-radius) !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.12),
+    var(--ag-shadow-lg) !important;
+}
+
+/* Snackbar / toast */
+.notistack-Snackbar > div:not(div.notistack-MuiContent) {
+  background: var(--ag-dark-3) !important;
+  backdrop-filter: blur(var(--ag-blur)) saturate(var(--ag-saturate)) !important;
+  border: var(--ag-frame) !important;
+  border-top: 1px solid var(--ag-border-top) !important;
+  border-radius: var(--ag-radius) !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.10),
+    var(--ag-shadow-md) !important;
+}
+
+
+/* ============================================================
+   9. MENUS DE CONTEXTO & DROPDOWN
+   ============================================================ */
+
+/*
+ * Menus de contexto (botão direito).
+ * Blur forte + vidro escuro para máximo contraste com o conteúdo.
+ */
+
+/* Pseudo-elemento que cria o fundo embaçado */
+div#context-menu:before,
+.main-contextMenu-menu:before,
+.Dropdown-menu:before,
+ul > div[data-tippy-root]:before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  border-radius: var(--ag-radius) !important;
+  backdrop-filter: blur(var(--ag-blur-heavy)) saturate(var(--ag-saturate));
+  background: var(--ag-dark-3);
+  border: var(--ag-frame);
+  border-top: 1px solid var(--ag-border-top);
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.14),
+    var(--ag-shadow-lg);
+}
+
+/* Container tippy */
+.main-contextMenu-tippy,
+ul > div[data-tippy-root] {
+  border-radius: var(--ag-radius) !important;
+  animation: ag-menu-in 0.18s var(--ag-ease) both;
+}
+
+/* Menu list */
+.main-contextMenu-menu,
+.Dropdown-menu {
+  background: transparent !important;
+  border-radius: var(--ag-radius) !important;
+}
+
+/* Item do menu */
+.main-contextMenu-menuItemButton {
+  border-radius: calc(var(--ag-radius) - 2px) !important;
+  transition:
+    background var(--ag-dur) var(--ag-ease),
+    transform  var(--ag-dur) var(--ag-ease) !important;
+}
+
+.main-contextMenu-menuItemButton:hover {
+  background: var(--ag-glass-2) !important;
+  transform: translateX(2px) !important;
+}
+
+/* Submenu inline */
+.main-contextMenu-menuItem > div {
+  backdrop-filter: blur(var(--ag-blur-heavy)) saturate(var(--ag-saturate));
+  background: var(--ag-dark-3);
+  border: var(--ag-frame);
+  border-top: 1px solid var(--ag-border-top);
+  clip-path: inset(0 round var(--ag-radius));
+  border-radius: var(--ag-radius) !important;
+}
+
+/* Dropdown global */
+.main-contextMenu-menu,
+.main-contextMenu-tippy > div,
+ul > div[data-tippy-root],
+.aCtCKL9BxAoHeVZS0uRs,
+.Dropdown-menu {
+  background: transparent !important;
+}
+
+/* Dropdown de filtro (search dropdowns) */
+#recent-searches-dropdown > div,
+#search-dropdown > div,
+#search-suggestions-loading-dropdown > div {
+  background: var(--ag-dark-3) !important;
+  backdrop-filter: blur(var(--ag-blur)) saturate(var(--ag-saturate)) !important;
+  border: var(--ag-frame) !important;
+  border-top: 1px solid var(--ag-border-top) !important;
+  border-radius: var(--ag-radius) !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.10),
+    var(--ag-shadow-md) !important;
+}
+
+
+/* ============================================================
+   10. CARDS & LISTAS
+   ============================================================ */
+
+/* Chips de filtro (All, Music, Podcasts) */
+.ChipInnerComponent-sm-selected {
+  background: rgba(255,255,255,0.12) !important;
+  backdrop-filter: blur(var(--ag-blur-light)) !important;
+  border: var(--ag-frame) !important;
+  border-top: 1px solid var(--ag-border-top) !important;
+  box-shadow: inset 0 1px 0 var(--ag-border-top) !important;
+}
+
+.ChipInnerComponent-sm:hover,
+.ChipInnerComponent-sm-selected:hover {
+  background: rgba(255,255,255,0.08) !important;
+}
+
+/* Seção "What's new" */
+.main-whatsNewFeed-listRow:hover {
+  background: var(--ag-glass-2) !important;
+  backdrop-filter: blur(var(--ag-blur-light)) !important;
+  border-radius: var(--ag-radius) !important;
+}
+
+/* Category card (search page) */
+.x-categoryCard-CategoryCard {
+  background: var(--ag-dark-2) !important;
+  backdrop-filter: blur(var(--ag-blur-light)) saturate(var(--ag-saturate)) !important;
+  border: var(--ag-frame) !important;
+  border-top: 1px solid var(--ag-border-top) !important;
+  box-shadow:
+    inset 0 1px 0 var(--ag-border-top),
+    var(--ag-shadow-sm) !important;
+  transition: transform var(--ag-dur) var(--ag-ease) !important;
+}
+
+.x-categoryCard-CategoryCard:hover {
+  transform: translateY(-3px) !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.18),
+    0 0 14px var(--ag-accent-glow),
+    var(--ag-shadow-md) !important;
+}
+
+/* About artist section */
+.artist-artistAbout-container {
+  background: var(--ag-dark-2) !important;
+  backdrop-filter: blur(var(--ag-blur)) saturate(var(--ag-saturate)) !important;
+  border: var(--ag-frame) !important;
+  border-top: 1px solid var(--ag-border-top) !important;
+  border-radius: var(--ag-radius) !important;
+  box-shadow: inset 0 1px 0 var(--ag-border-top) !important;
+}
+
+/* Biblioteca expandida — linha de item */
+.main-yourLibraryX-listItem:hover,
+.main-rootlist-wrapper div[role="presentation"] div[role="row"]:hover {
+  background: var(--ag-glass-1) !important;
+  backdrop-filter: blur(var(--ag-blur-light)) !important;
+  border-radius: var(--ag-radius) !important;
+}
+
+/* Settings dropdown / select */
+.main-dropDown-dropDown,
+.x-settings-input {
+  background: var(--ag-dark-2) !important;
+  backdrop-filter: blur(var(--ag-blur-light)) !important;
+  border: var(--ag-frame) !important;
+  border-radius: var(--ag-radius) !important;
+}
+
+/* Equalizer settings */
+.x-settings-equalizerSection {
+  background: var(--ag-dark-2) !important;
+  backdrop-filter: blur(var(--ag-blur-light)) !important;
+  border: var(--ag-frame) !important;
+  border-radius: var(--ag-radius) !important;
+  box-shadow: inset 0 1px 0 var(--ag-border-top) !important;
+}
+
+/* Toggle */
+.x-toggle-indicatorWrapper {
+  background: var(--ag-dark-2) !important;
+  backdrop-filter: blur(var(--ag-blur-light)) !important;
+  border: var(--ag-frame) !important;
+}
+
+/* Artist pick (pinned) */
+.a9bYyePMlXY0dnBfcPu1 {
+  background: var(--ag-dark-2) !important;
+  backdrop-filter: blur(var(--ag-blur)) saturate(var(--ag-saturate)) !important;
+  border: var(--ag-frame) !important;
+  border-top: 1px solid var(--ag-border-top) !important;
+  border-radius: var(--ag-radius) !important;
+  box-shadow: inset 0 1px 0 var(--ag-border-top) !important;
+}
+
+/* Playlist edit modal image button */
+.main-playlistEditDetailsModal-imageDropDownButton,
+.profile-editImage-imageContainer {
+  transition: transform var(--ag-dur) var(--ag-ease) !important;
+}
+
+.profile-editImage-imageContainer:hover {
+  transform: scale(0.97) !important;
+}
+
+/* Mixing / crossfade row */
+.OXbOllylQypBQUED331R {
+  background: var(--ag-dark-2) !important;
+  backdrop-filter: blur(var(--ag-blur-light)) !important;
+  border: var(--ag-frame) !important;
+  border-radius: var(--ag-radius) !important;
+}
+
+/* Song preview */
+.FP_XXx0FMQPJEu3WzfpM {
+  --background-base: var(--ag-dark-3) !important;
+  backdrop-filter: blur(var(--ag-blur)) saturate(var(--ag-saturate)) !important;
+}
+
+
+/* ============================================================
+   11. SCROLLBAR
+   ============================================================ */
+
+/* Overlay scrollbars (padrão do Spotify) */
+.os-scrollbar-handle {
+  background: rgba(255,255,255,0.18) !important;
+  border-radius: 50px !important;
+  transition: background var(--ag-dur) var(--ag-ease) !important;
+}
+
+.os-scrollbar-handle:hover,
+.os-scrollbar:hover .os-scrollbar-handle {
+  background: rgba(255,255,255,0.30) !important;
+}
+
+.os-scrollbar-track {
+  background: rgba(255,255,255,0.04) !important;
+}
+
+/* Webkit scrollbars (letras, etc.) */
+::-webkit-scrollbar {
+  width: 4px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(255,255,255,0.18);
+  border-radius: 50px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(255,255,255,0.30);
+}
+
+
+/* ============================================================
+   12. DETALHES & BRILHOS
+   ============================================================ */
+
+/*
+ * Botões primários — vidro com accent do tema
+ */
+.e-91000-button-primary .e-91000-button-primary__inner,
+[data-encore-id="buttonPrimary"] span {
+  background: var(--ag-accent) !important;
+  backdrop-filter: blur(var(--ag-blur-light)) !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.22),
+    0 0 12px var(--ag-accent-glow) !important;
+  transition:
+    transform   var(--ag-dur) var(--ag-ease),
+    box-shadow  var(--ag-dur) var(--ag-ease) !important;
+}
+
+[data-encore-id="buttonPrimary"]:hover span {
+  transform: scale(1.04) !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.30),
+    0 0 20px var(--ag-accent-glow) !important;
+}
+
+/*
+ * Botões secundários — vidro transparente
+ */
+.Button-sc-y0gtbx-0,
+[data-encore-id="buttonSecondary"] {
+  background: var(--ag-glass-2) !important;
+  backdrop-filter: blur(var(--ag-blur-light)) !important;
+  border: 1px solid rgba(255,255,255,0.22) !important;
+  border-radius: var(--ag-radius) !important;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.14) !important;
+  transition:
+    box-shadow  var(--ag-dur) var(--ag-ease),
+    transform   var(--ag-dur) var(--ag-ease),
+    background  var(--ag-dur) var(--ag-ease) !important;
+}
+
+.Button-sc-y0gtbx-0:hover,
+[data-encore-id="buttonSecondary"]:hover {
+  background: var(--ag-glass-3) !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.22),
+    0 0 10px rgba(255,255,255,0.08) !important;
+  transform: translateY(-1px) !important;
+}
+
+/*
+ * Avatar do usuário
+ */
+.main-avatar-image,
+.main-userWidget-boxCondensed,
+.main-userWidget-box {
+  border-radius: var(--ag-radius) !important;
+}
+
+.main-avatar-image {
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.18),
+    var(--ag-shadow-sm) !important;
+}
+
+/*
+ * Imagens de capa/thumbnail — sombra suave
+ */
+.main-entityHeader-image,
+.main-trackList-rowSectionStart > img,
+.main-yourLibraryX-listRowEntityImage {
+  box-shadow: var(--ag-shadow-md) !important;
+}
+
+.main-entityHeader-image {
+  border-radius: var(--ag-radius) !important;
+}
+
+/*
+ * Tab bar de letras/fila com hover
+ */
+.lyrics-config-button,
+.IAyWaeDamLJLjxuPeVKw {
+  background: var(--ag-glass-2) !important;
+  backdrop-filter: blur(var(--ag-blur-light)) !important;
+  border: var(--ag-frame) !important;
+  border-radius: var(--ag-radius) !important;
+}
+
+/*
+ * Genius/Marketplace — containers extras
+ */
+.main-popper-container {
+  border-radius: var(--ag-radius) !important;
+}
+
+.main-popper-arrow,
+.main-popper-arrow:before {
+  display: none;
+}
+
+/*
+ * Tiles de voz/vídeo
+ */
+[class*="videoWrapper-"],
+[class*="tile-"] {
+  background: var(--ag-dark-2) !important;
+  backdrop-filter: blur(var(--ag-blur-light)) !important;
+  border: var(--ag-frame) !important;
+  border-radius: var(--ag-radius) !important;
+}
+
+/*
+ * DJ X button na now playing bar
+ */
+.vOIOYNxCLYIrEIrQ5zrF {
+  background: var(--ag-glass-2) !important;
+  backdrop-filter: blur(var(--ag-blur-light)) !important;
+  border: var(--ag-frame) !important;
+  border-radius: 50% !important;
+  outline: none !important;
+  box-shadow: inset 0 1px 0 var(--ag-border-top) !important;
+}
+
+.vOIOYNxCLYIrEIrQ5zrF:hover {
+  background: var(--ag-glass-3) !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.22),
+    0 0 10px var(--ag-accent-glow) !important;
+}
+
+/*
+ * "Concerts near you" badge
+ */
+.BHdaqaUZGzH4QtSxnOPg {
+  backdrop-filter: blur(var(--ag-blur-light)) !important;
+  border: var(--ag-frame) !important;
+  border-top: 1px solid var(--ag-border-top) !important;
+  box-shadow: inset 0 1px 0 var(--ag-border-top) !important;
+}
+
+/*
+ * Find / filter input
+ */
+.x-filterBox-filterInput {
+  background: var(--ag-dark-2) !important;
+  backdrop-filter: blur(var(--ag-blur-light)) !important;
+  border: var(--ag-frame) !important;
+  border-radius: var(--ag-radius) !important;
+}
+
+/* ─── FIM ─────────────────────────────────────────────────── */

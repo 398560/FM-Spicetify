@@ -1,0 +1,140 @@
+/**
+ * @name FM Watermark
+ * @author Plague Doctor
+ * @description Marca d'água "FM" elegante no canto da tela — presente mas discreta
+ * @version 1.0.0
+ *
+ * ─── CONFIG ──────────────────────────────────────────────────
+ *  Ajuste as variáveis abaixo para customizar posição,
+ *  opacidade e tamanho da marca d'água.
+ * ─────────────────────────────────────────────────────────────
+ */
+
+:root {
+  --wm-opacity:    0.042;    /* 0.0 = invisível, 0.1 = bem visível    */
+  --wm-size:       18vw;     /* tamanho relativo à largura da janela  */
+  --wm-bottom:     -2vw;     /* distância da borda inferior           */
+  --wm-right:      -1.5vw;   /* distância da borda direita            */
+  --wm-blur:       0px;      /* desfoque extra (0 = nítido)           */
+  --wm-color:      #ffffff;  /* cor do texto                          */
+  --wm-rotate:     -4deg;    /* inclinação sutil                      */
+}
+
+/*
+ * O "FM" é inserido via ::after no container raiz do app.
+ * Usa pointer-events: none para não interferir em cliques.
+ * z-index baixo mas acima do fundo (não bloqueia UI).
+ *
+ * A fonte é uma condensada geométrica para dar peso visual
+ * sem ocupar espaço — as letras "respiram" no canto.
+ */
+
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap');
+
+.Root::after {
+  content: 'FM';
+
+  /* Posicionamento */
+  position: fixed;
+  bottom:    var(--wm-bottom);
+  right:     var(--wm-right);
+  z-index:   1;
+
+  /* Tipografia */
+  font-family:    'Bebas Neue', 'Impact', 'Arial Narrow', sans-serif;
+  font-size:      var(--wm-size);
+  font-weight:    900;
+  line-height:    1;
+  letter-spacing: -0.04em;
+  color:          var(--wm-color);
+
+  /* Visibilidade */
+  opacity:        var(--wm-opacity);
+  filter:         blur(var(--wm-blur));
+
+  /* Transformação */
+  transform:      rotate(var(--wm-rotate));
+  transform-origin: bottom right;
+
+  /* Garante que não interfere */
+  pointer-events: none;
+  user-select:    none;
+  -webkit-user-select: none;
+
+  /*
+   * mix-blend-mode: overlay faz a marca "misturar" com
+   * o conteúdo atrás — parece gravada na superfície,
+   * não colada por cima. Muda conforme o fundo.
+   */
+  mix-blend-mode: overlay;
+
+  /*
+   * will-change: opacity evita repaint em cada frame
+   * quando a opacidade muda com o tema.
+   */
+  will-change: opacity;
+
+  /* Transição suave caso o tema mude o fundo */
+  transition: opacity 0.6s ease;
+}
+
+/*
+ * Versão alternativa: quando em fullscreen/cinema,
+ * a marca fica ligeiramente mais visível para se manter presente.
+ */
+.Root:has(.Root__cinema-view)::after {
+  --wm-opacity: 0.065;
+}
+
+/*
+ * No modo de letras fullscreen (lyrics cinema),
+ * a marca fica bem sutil para não competir.
+ */
+body:has(div#lyrics-fullscreen-container) .Root::after {
+  --wm-opacity: 0.028;
+}
+
+/* ============================================================
+   VARIANTE: Dot separador entre FM
+   Adiciona um ponto estilizado entre as letras via pseudo-elemento
+   num wrapper invisível — comentado por padrão, descomente se quiser
+   ============================================================ */
+
+/*
+.Root::after {
+  content: 'F·M';
+  letter-spacing: 0.02em;
+}
+*/
+
+/* ============================================================
+   VARIANTE: FM na vertical (rotação 90°)
+   Descomentar para posicionar verticalmente na lateral direita
+   ============================================================ */
+
+/*
+:root {
+  --wm-bottom:  20vh;
+  --wm-right:   -6vw;
+  --wm-rotate:  -90deg;
+  --wm-size:    12vw;
+}
+.Root::after {
+  transform-origin: right center;
+}
+*/
+
+/* ============================================================
+   VARIANTE: Canto inferior esquerdo
+   Descomentar para mover a marca para o lado oposto
+   ============================================================ */
+
+/*
+.Root::after {
+  right:  unset;
+  left:   -1.5vw;
+  bottom: -2vw;
+  --wm-rotate: 4deg;
+  transform-origin: bottom left;
+}
+*/

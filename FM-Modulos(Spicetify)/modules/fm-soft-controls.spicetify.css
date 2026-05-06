@@ -1,0 +1,152 @@
+/**
+ * @name FM Soft Controls
+ * @description Controles, cards, progress bar e scrollbars usando accent do tema.
+ * @version 1.0.0
+ */
+
+:root {
+  --fm-accent-rgb: var(--spice-rgb-button, 125, 147, 135);
+  --fm-accent: rgb(var(--fm-accent-rgb));
+  --fm-accent-soft: rgba(var(--fm-accent-rgb), 0.18);
+  --fm-accent-glow: rgba(var(--fm-accent-rgb), 0.32);
+  --fm-control-surface: rgba(10, 12, 14, 0.42);
+  --fm-control-strong: rgba(10, 12, 14, 0.58);
+  --fm-control-border: rgba(var(--fm-accent-rgb), 0.2);
+  --fm-radius: 8px;
+}
+
+.main-playButton-PlayButton button,
+.main-playPauseButton-button,
+[data-testid="control-button-playpause"],
+[data-encore-id="buttonPrimary"] span {
+  background: var(--fm-accent) !important;
+  box-shadow: 0 0 24px var(--fm-accent-glow) !important;
+}
+
+.main-playButton-PlayButton button:hover,
+.main-playPauseButton-button:hover,
+[data-testid="control-button-playpause"]:hover,
+[data-encore-id="buttonPrimary"]:hover span {
+  transform: scale(1.04);
+  box-shadow: 0 0 34px rgba(var(--fm-accent-rgb), 0.44) !important;
+}
+
+.progress-bar,
+.playback-progressbar-container div[data-testid="progress-bar"],
+.volume-bar .progress-bar {
+  --fg-color: var(--fm-accent) !important;
+  --bg-color: rgba(255, 255, 255, 0.16) !important;
+  --progress-bar-height: 4px;
+  --progress-bar-radius: 999px;
+}
+
+.progress-bar__fg,
+.progress-bar__fg_wrapper,
+.x-progressBar-fillColor,
+.playback-progressbar-container div[data-testid="progress-bar"] [data-testid="progress-bar-fill"] {
+  background-color: var(--fm-accent) !important;
+  box-shadow: 0 0 18px rgba(var(--fm-accent-rgb), 0.32);
+}
+
+.progress-bar__slider,
+.playback-progressbar-container div[data-testid="progress-bar-handle"] {
+  background-color: var(--spice-text) !important;
+  border: 2px solid var(--fm-accent) !important;
+  box-shadow: 0 0 16px rgba(var(--fm-accent-rgb), 0.34) !important;
+}
+
+.main-card-card,
+.view-homeShortcutsGrid-shortcut,
+.main-shelf-shelfGrid .BoxComponent-group-card,
+.main-nowPlayingView-section,
+.main-trackCreditsModal-container {
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.045), rgba(255, 255, 255, 0.01)),
+    var(--fm-control-surface) !important;
+  border: 1px solid var(--fm-control-border);
+  border-radius: var(--fm-radius) !important;
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.2);
+  transition:
+    background 160ms ease,
+    border-color 160ms ease,
+    box-shadow 160ms ease,
+    transform 160ms ease;
+}
+
+.main-card-card:hover,
+.main-card-card:focus-within,
+.view-homeShortcutsGrid-shortcut:hover,
+.main-shelf-shelfGrid .BoxComponent-group-card:hover {
+  background: rgba(var(--fm-accent-rgb), 0.14) !important;
+  border-color: rgba(var(--fm-accent-rgb), 0.28);
+  box-shadow:
+    0 18px 38px rgba(0, 0, 0, 0.26),
+    0 0 24px rgba(var(--fm-accent-rgb), 0.12);
+  transform: translateY(-1px);
+}
+
+.main-trackList-trackListRow:hover,
+.main-trackList-trackListRow:focus-within,
+.main-rootlist-rootlistItem:hover,
+.main-yourLibraryX-libraryRootlist li > div:hover {
+  background: rgba(var(--fm-accent-rgb), 0.1) !important;
+  border-radius: 6px !important;
+}
+
+.main-navBar-navBarLinkActive,
+.main-collectionLinkButton-selected,
+.main-yourLibraryX-navLinkActive,
+.main-yourLibraryX-filterArea button[aria-checked="true"],
+.ChipInnerComponent-sm-selected {
+  background: rgba(var(--fm-accent-rgb), 0.2) !important;
+  color: var(--spice-text) !important;
+  box-shadow: inset 0 0 0 1px rgba(var(--fm-accent-rgb), 0.24);
+}
+
+.main-contextMenu-menu,
+.main-userWidget-dropDownMenu,
+.main-contextMenu-tippy,
+#recent-searches-dropdown > div,
+#search-dropdown > div,
+#search-suggestions-loading-dropdown > div {
+  background: var(--fm-control-strong) !important;
+  border: 1px solid var(--fm-control-border) !important;
+  border-radius: var(--fm-radius) !important;
+  box-shadow:
+    0 22px 58px rgba(0, 0, 0, 0.48),
+    0 0 34px rgba(var(--fm-accent-rgb), 0.12) !important;
+  backdrop-filter: blur(24px) saturate(1.12);
+  -webkit-backdrop-filter: blur(24px) saturate(1.12);
+}
+
+.main-contextMenu-menuItemButton:hover,
+.main-userWidget-dropDownMenuItemButton:hover,
+.main-contextMenu-menuItem:hover {
+  background: rgba(var(--fm-accent-rgb), 0.16) !important;
+}
+
+* {
+  scrollbar-color: rgba(var(--fm-accent-rgb), 0.44) rgba(255, 255, 255, 0.05);
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.04);
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(var(--fm-accent-rgb), 0.36);
+  border: 3px solid transparent;
+  border-radius: 999px;
+  background-clip: content-box;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(var(--fm-accent-rgb), 0.58);
+  border: 2px solid transparent;
+  background-clip: content-box;
+}

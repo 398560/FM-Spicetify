@@ -1,0 +1,71 @@
+/**
+ * @name FM Cover Wallpaper
+ * @description Wallpaper gigante e desfocado para temas Spicetify.
+ * @version 1.0.0
+ */
+
+:root {
+  --fm-wallpaper-image: var(--fm-cover-url, var(--image_url, none));
+  --fm-wallpaper-opacity: 0.82;
+  --fm-wallpaper-blur: 24px;
+  --fm-wallpaper-brightness: 0.78;
+  --fm-wallpaper-saturation: 1;
+  --fm-wallpaper-scale: 1.12;
+  --fm-wallpaper-tint: rgba(4, 6, 8, 0.46);
+  --fm-wallpaper-vignette: rgba(0, 0, 0, 0.76);
+  --fm-wallpaper-accent-rgb: var(--fm-accent-rgb, var(--spice-rgb-button, 125, 147, 135));
+}
+
+html,
+body,
+.Root {
+  background: #050607 !important;
+}
+
+.Root__top-container {
+  position: relative;
+  isolation: isolate;
+  background: #050607 !important;
+}
+
+.Root__top-container::before,
+.Root__top-container::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.Root__top-container::before {
+  inset: -72px;
+  background-image: var(--fm-wallpaper-image);
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  opacity: var(--fm-wallpaper-opacity);
+  transform: scale(var(--fm-wallpaper-scale));
+  filter:
+    blur(var(--fm-wallpaper-blur))
+    brightness(var(--fm-wallpaper-brightness))
+    saturate(var(--fm-wallpaper-saturation));
+  transition:
+    background-image 650ms ease,
+    filter 650ms ease,
+    opacity 650ms ease;
+}
+
+.Root__top-container::after {
+  background:
+    radial-gradient(circle at 18% 14%, rgba(var(--fm-wallpaper-accent-rgb), 0.32), transparent 34%),
+    radial-gradient(circle at 82% 78%, rgba(var(--fm-wallpaper-accent-rgb), 0.18), transparent 40%),
+    linear-gradient(135deg, var(--fm-wallpaper-tint), rgba(4, 6, 8, 0.56) 48%, var(--fm-wallpaper-vignette)),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.05), transparent 38%);
+  backdrop-filter: blur(1px);
+  -webkit-backdrop-filter: blur(1px);
+}
+
+.Root__top-container > * {
+  position: relative;
+  z-index: 1;
+}

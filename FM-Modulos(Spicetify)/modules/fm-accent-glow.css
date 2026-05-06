@@ -1,0 +1,200 @@
+/**
+ * @name FM Accent Glow
+ * @author Plague Doctor
+ * @description Sistema de glow, cor viva e accentuação baseados em --spice-button
+ *              Deixa a UI "respirar" com cor sem poluir visualmente
+ * @version 1.0.0
+ */
+
+:root {
+  /* Glow níveis — usa a cor do tema */
+  --fg-glow-xs: 0 0  4px rgba(var(--spice-rgb-button, 100,180,255), 0.20);
+  --fg-glow-sm: 0 0  8px rgba(var(--spice-rgb-button, 100,180,255), 0.30);
+  --fg-glow-md: 0 0 16px rgba(var(--spice-rgb-button, 100,180,255), 0.35);
+  --fg-glow-lg: 0 0 28px rgba(var(--spice-rgb-button, 100,180,255), 0.40);
+
+  /* Tint de cor para fundos */
+  --fg-tint-xs: rgba(var(--spice-rgb-button, 100,180,255), 0.04);
+  --fg-tint-sm: rgba(var(--spice-rgb-button, 100,180,255), 0.08);
+  --fg-tint-md: rgba(var(--spice-rgb-button, 100,180,255), 0.14);
+}
+
+/* ============================================================
+   NOW PLAYING — indicador de faixa ativa
+   ============================================================ */
+
+/* Número da faixa tocando → troca por glow */
+.main-trackList-playingIcon {
+  filter: drop-shadow(var(--fg-glow-sm)) !important;
+}
+
+/* Linha da faixa em reprodução — tint sutil */
+[class*="main-trackList-active"],
+.main-trackList-trackListRow[data-testid="tracklist-row"][aria-selected="true"] {
+  background: var(--fg-tint-xs) !important;
+}
+
+/* ============================================================
+   BOTÕES DE CONTROLE — glow no hover
+   ============================================================ */
+
+.main-playPauseButton-button:hover {
+  filter: drop-shadow(var(--fg-glow-md)) !important;
+}
+
+.main-repeatButton-button.main-repeatButton-active,
+.main-shuffleButton-button.main-shuffleButton-active {
+  color: var(--spice-button, #fff) !important;
+  filter: drop-shadow(var(--fg-glow-xs)) !important;
+  transition: filter 0.2s ease, color 0.2s ease !important;
+}
+
+.main-repeatButton-button.main-repeatButton-active:hover,
+.main-shuffleButton-button[aria-checked="true"]:hover {
+  filter: drop-shadow(var(--fg-glow-md)) !important;
+}
+
+/* Botão de like */
+.main-addButton-button[aria-label="Remove from Your Library"],
+.control-button-heart[aria-checked="true"] {
+  color: var(--spice-button, #fff) !important;
+  filter: drop-shadow(var(--fg-glow-sm)) !important;
+}
+
+.main-addButton-button[aria-label="Remove from Your Library"]:hover {
+  filter: drop-shadow(var(--fg-glow-lg)) !important;
+}
+
+/* ============================================================
+   BARRA DE PROGRESSO — cor accent
+   ============================================================ */
+
+.progress-bar {
+  --fg-color: var(--spice-button) !important;
+  --is-active-fg-color: var(--spice-button-active) !important;
+}
+
+/* Fill da barra de progresso */
+.x-progressBar-fillColor {
+  background: var(--spice-button) !important;
+  box-shadow: var(--fg-glow-sm) !important;
+}
+
+/* Slider thumb */
+.progress-bar__slider {
+  background: var(--spice-button) !important;
+  box-shadow: var(--fg-glow-sm), 0 2px 4px rgba(0,0,0,0.3) !important;
+  transition: transform 0.15s ease, box-shadow 0.15s ease !important;
+}
+
+.progress-bar:hover .progress-bar__slider {
+  transform: scale(1.3) !important;
+  box-shadow: var(--fg-glow-md), 0 2px 6px rgba(0,0,0,0.4) !important;
+}
+
+/* ============================================================
+   NAV LINK ATIVO — accent na barra lateral
+   ============================================================ */
+
+.main-navBar-navBarLinkActive,
+.main-collectionLinkButton-selected {
+  background: var(--fg-tint-sm) !important;
+  box-shadow:
+    inset 2px 0 0 var(--spice-button),
+    var(--fg-glow-xs) !important;
+  border-radius: 0 6px 6px 0 !important;
+}
+
+.main-navBar-navBarLinkActive span,
+.main-collectionLinkButton-selected span {
+  color: var(--spice-text, #fff) !important;
+}
+
+/* ============================================================
+   BOTÃO PRIMÁRIO — accent forte
+   ============================================================ */
+
+.e-91000-button-primary .e-91000-button-primary__inner {
+  background: var(--spice-button) !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.22),
+    var(--fg-glow-sm) !important;
+  transition: box-shadow 0.2s ease, transform 0.15s ease !important;
+}
+
+.e-91000-button-primary .e-91000-button-primary__inner:hover {
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.30),
+    var(--fg-glow-lg) !important;
+}
+
+/* ============================================================
+   ITEM ATIVO NA BIBLIOTECA
+   ============================================================ */
+
+.main-yourLibraryX-listItem[aria-selected="true"],
+.main-rootlist-wrapper [role="row"][aria-selected="true"] {
+  background: var(--fg-tint-sm) !important;
+  box-shadow: inset 2px 0 0 var(--spice-button) !important;
+  border-radius: 0 6px 6px 0 !important;
+}
+
+/* ============================================================
+   CANAL ATIVO / CHIP SELECIONADO
+   ============================================================ */
+
+.ChipInnerComponent-sm-selected {
+  background: var(--fg-tint-md) !important;
+  box-shadow:
+    inset 0 0 0 1px rgba(var(--spice-rgb-button, 100,180,255), 0.35),
+    var(--fg-glow-xs) !important;
+}
+
+/* ============================================================
+   SELEÇÃO DE TEXTO — usa accent
+   ============================================================ */
+
+::selection {
+  background: rgba(var(--spice-rgb-button, 100,180,255), 0.35) !important;
+  color: #fff !important;
+}
+
+/* ============================================================
+   BADGE DE REPRODUÇÃO ATIVA (equalizer icon)
+   ============================================================ */
+
+.Ydxgl4Y23orfVVVI9O2k svg,
+.main-trackList-playingIcon {
+  color: var(--spice-button) !important;
+  fill:  var(--spice-button) !important;
+}
+
+/* ============================================================
+   SCROLLBAR ACCENT
+   ============================================================ */
+
+.os-scrollbar-handle {
+  background: rgba(var(--spice-rgb-button, 100,180,255), 0.25) !important;
+}
+
+.os-scrollbar-handle:hover {
+  background: rgba(var(--spice-rgb-button, 100,180,255), 0.45) !important;
+}
+
+/* ============================================================
+   STATUS BADGE (notificação) — accent dot
+   ============================================================ */
+
+.FZ4y0Q61kFpjJzUjCvSa svg > circle:last-child {
+  fill: var(--spice-button) !important;
+}
+
+/* ============================================================
+   HOVER GENÉRICO — tint accent ultra-sutil
+   ============================================================ */
+
+.main-card-card:hover,
+.view-homeShortcutsGrid-shortcut:hover,
+.x-categoryCard-CategoryCard:hover {
+  background-color: var(--fg-tint-xs) !important;
+}

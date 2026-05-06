@@ -1,0 +1,20 @@
+/*
+  Example import order for a theme user.css.
+  Change relative paths according to where this repo is copied.
+*/
+
+@import url("../modules/fm-cover-wallpaper.spicetify.css");
+@import url("../modules/fm-clean-reset.spicetify.css");
+@import url("../modules/fm-clean-layout.css");
+@import url("../modules/fm-aero-glass.spicetify.css");
+@import url("../modules/fm-depth.css");
+@import url("../modules/fm-soft-controls.spicetify.css");
+@import url("../modules/fm-accent-glow.css");
+@import url("../modules/fm-typography.css");
+@import url("../modules/fm-watermark.css");
+
+:root {
+  --fm-wallpaper-image: var(--fm-cover-url, var(--image_url, none));
+  --fm-accent-rgb: 125, 147, 135;
+  --fm-radius: 8px;
+}

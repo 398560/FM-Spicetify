@@ -1,0 +1,73 @@
+/**
+ * @name FM Clean Reset
+ * @description Remove fundos opacos e gradientes padrao para abrir espaco ao wallpaper.
+ * @version 1.0.0
+ */
+
+:root {
+  --fm-reset-elevated: rgba(8, 10, 12, 0.42);
+}
+
+.encore-dark-theme,
+.encore-layout-themes,
+.encore-bright-accent-set {
+  --background-base: transparent !important;
+  --background-highlight: rgba(255, 255, 255, 0.08) !important;
+  --background-press: rgba(255, 255, 255, 0.12) !important;
+  --background-elevated-base: var(--fm-reset-elevated) !important;
+  --background-elevated-highlight: rgba(255, 255, 255, 0.1) !important;
+  --background-elevated-press: rgba(255, 255, 255, 0.14) !important;
+}
+
+.Root__main-view,
+.Root__nav-bar,
+.Root__right-sidebar,
+.Root__now-playing-bar,
+.main-view-container,
+.main-view-container__scroll-node,
+.main-view-container__scroll-node-child,
+.main-view-container__scroll-node-child-spacer,
+.main-home-home,
+.main-home-homeHeader,
+.main-topBar-background,
+.main-topBar-overlay,
+.main-actionBarBackground-background,
+.playlist-playlist-actionBarBackground-background,
+.playlist-playlist-playlistContent,
+.main-entityHeader-overlay,
+.main-entityHeader-backgroundColor,
+.main-entityHeader-background.main-entityHeader-overlay,
+.x-actionBarBackground-background,
+.x-entityHeader-overlay,
+.under-main-view,
+.under-main-view > div {
+  background: transparent !important;
+  background-color: transparent !important;
+  background-image: none !important;
+}
+
+.main-topBar-withBackgroundBlur::before {
+  display: none !important;
+}
+
+.main-nowPlayingBar-container,
+.main-nowPlayingBar-nowPlayingBar,
+.main-nowPlayingBar-left,
+.main-nowPlayingBar-center,
+.main-nowPlayingBar-right,
+.main-nowPlayingWidget-nowPlaying,
+.main-nowPlayingView-content.main-nowPlayingView-gradient,
+.main-nowPlayingView-contextItemInfo::before,
+.main-nowPlayingView-mainWrapper {
+  background: transparent !important;
+}
+
+.main-trackList-trackListHeader,
+.artist-artistDiscography-topBar,
+.marketplace-header,
+.search-searchCategory-SearchCategory,
+.main-home-filterChipsContainer {
+  background: rgba(6, 8, 10, 0.34) !important;
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+}

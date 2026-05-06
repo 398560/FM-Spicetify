@@ -1,0 +1,272 @@
+/**
+ * @name FM Clean Layout
+ * @author Plague Doctor
+ * @description Espaçamento consistente, grid limpo e proporções refinadas
+ *              Remove distrações visuais, alinha tudo com precisão
+ * @version 1.0.0
+ */
+
+:root {
+  --cl-gap-xs:  4px;
+  --cl-gap-sm:  8px;
+  --cl-gap-md: 16px;
+  --cl-gap-lg: 24px;
+  --cl-gap-xl: 32px;
+
+  --cl-radius-sm:  6px;
+  --cl-radius-md:  var(--button-border, 8px);
+  --cl-radius-lg: 12px;
+  --cl-radius-xl: 16px;
+}
+
+/* ============================================================
+   REMOÇÃO DE RUÍDO VISUAL
+   Elementos que poluem sem agregar.
+   ============================================================ */
+
+/* Remove gradiente atrás dos chips de filtro */
+.main-home-filterChipsSection.CEB3nzyniIFOx1yM1eYy:after {
+  background: none !important;
+}
+
+/* Remove sombra da topbar quando não está scrollada */
+.main-topBar-container:not(.main-topBar-withBackgroundBlur) {
+  box-shadow: none !important;
+}
+
+/* Remove overlay da entity header */
+.main-entityHeader-background.main-entityHeader-overlay,
+.main-entityHeader-backgroundColor {
+  display: none !important;
+}
+
+/* Remove seta do popper */
+.main-popper-arrow,
+.main-popper-arrow:before {
+  display: none !important;
+}
+
+/* Remove bordas desnecessárias em contexts menus */
+.main-contextMenu-dividerAfter:last-child {
+  display: none !important;
+}
+
+/* Remove o semi-dark overlay na entity header de artista */
+.ZLQMyiECjwH0Fat0ymny,
+.ZLQMyiECjwh0Fat0ymny {
+  display: none !important;
+}
+
+/* Remove background colour redundante atrás da topbar */
+.main-topBar-withBackgroundBlur:before {
+  display: none !important;
+}
+
+/* Esconde botões de anúncio/promoção que poluem */
+.f59DF4qQ_FphIrVeRYkI,
+.MnW5SczTcbdFHxLZ_Z8j {
+  display: none !important;
+}
+
+/* ============================================================
+   ESPAÇAMENTO CONSISTENTE
+   ============================================================ */
+
+/* Home: padding nos chips */
+.main-home-filterChipsContainer {
+  padding-top:    var(--cl-gap-xl) !important;
+  padding-bottom: var(--cl-gap-md) !important;
+}
+
+/* Shelf: sem margin-bottom gigante entre prateleiras */
+.main-shelf-shelf {
+  margin-bottom: var(--cl-gap-md) !important;
+}
+
+/* Grid de cards: gap consistente */
+.main-gridContainer-gridContainer {
+  padding-bottom: var(--cl-gap-md) !important;
+  gap: var(--cl-gap-md) !important;
+}
+
+/* Biblioteca: padding interno */
+.main-yourLibraryX-entryPoints {
+  padding: var(--cl-gap-sm) !important;
+  border-radius: var(--cl-radius-md) !important;
+}
+
+/* Seções da now playing view */
+.main-nowPlayingView-section {
+  padding: var(--cl-gap-md) !important;
+  margin-bottom: var(--cl-gap-sm) !important;
+}
+
+/* Buddy feed header */
+.main-buddyFeed-header {
+  padding-top:    var(--cl-gap-sm) !important;
+  padding-bottom: var(--cl-gap-sm) !important;
+}
+
+/* ============================================================
+   CARDS — proporções consistentes
+   ============================================================ */
+
+/* Altura do home shortcut grid */
+.view-homeShortcutsGrid-grid {
+  --item-height: 56px !important;
+  gap: var(--cl-gap-sm) !important;
+}
+
+/* Cards — espaçamento interno consistente */
+.main-card-card {
+  padding: 0 !important;
+  overflow: hidden;
+}
+
+/* Imagem do card — sem overflow */
+.main-card-imageContainer {
+  border-radius: var(--cl-radius-md) var(--cl-radius-md) 0 0 !important;
+  overflow: hidden !important;
+}
+
+/* Texto do card — padding consistente */
+.main-cardHeader-text {
+  padding: var(--cl-gap-sm) var(--cl-gap-sm) var(--cl-gap-md) !important;
+}
+
+/* ============================================================
+   TRACKLIST — limpeza e proporção
+   ============================================================ */
+
+/* Header: sem box-shadow dupla */
+.main-trackList-trackListHeader {
+  border-bottom: 1px solid rgba(255,255,255,0.06) !important;
+  margin-bottom: var(--cl-gap-xs) !important;
+}
+
+/* Linhas da tracklist — altura mínima confortável */
+.main-trackList-trackListRow {
+  height: 52px !important;
+  min-height: 52px !important;
+  border-radius: var(--cl-radius-md) !important;
+  transition: background 0.15s ease !important;
+}
+
+/* Padding lateral nas linhas */
+.main-trackList-rowSectionStart {
+  padding-left: var(--cl-gap-md) !important;
+}
+.main-trackList-rowSectionEnd {
+  padding-right: var(--cl-gap-md) !important;
+}
+
+/* ============================================================
+   NOW PLAYING BAR — alinhamento fino
+   ============================================================ */
+
+/* Altura da barra */
+.main-nowPlayingBar-nowPlayingBar {
+  height: 88px !important;
+  padding: 0 var(--cl-gap-md) !important;
+}
+
+/* Capa — proporção quadrada, centralizada */
+.main-coverSlotCollapsed-container:has(#VideoPlayerNpb_ReactPortal:empty) {
+  aspect-ratio: 1 / 1 !important;
+  margin-inline: var(--cl-gap-sm) !important;
+}
+
+/* ============================================================
+   TOPBAR — alinhamento e limpeza
+   ============================================================ */
+
+/* Remove spacer de layout que causa desalinhamento */
+.Kgjmt7IX5samBYUpbkBu,
+.NjFwvjnZ6o4vmYe {
+  display: none !important;
+}
+
+/* Botões da topbar — tamanho uniforme */
+div.main-globalNav-historyButtonsContainer div > button,
+.custom-navlink {
+  width:  32px !important;
+  height: 32px !important;
+  min-block-size: 0 !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+
+/* ============================================================
+   SCROLLBAR — mais fina e elegante
+   ============================================================ */
+
+.os-scrollbar-vertical {
+  width: 4px !important;
+  margin: var(--cl-gap-sm) var(--cl-gap-xs) !important;
+  transition: width 0.15s ease, opacity 0.15s ease !important;
+}
+
+.os-scrollbar-vertical:hover {
+  width: 6px !important;
+}
+
+/* ============================================================
+   BORDER RADIUS — uniformidade
+   ============================================================ */
+
+/* Chips */
+.ChipInnerComponent-sm,
+.ChipInner__ChipInnerComponent-sc-1ly6j4j-0 {
+  border-radius: var(--cl-radius-md) !important;
+}
+
+/* Botões em geral */
+.Button-sc-y0gtbx-0,
+[data-encore-id="buttonPrimary"],
+[data-encore-id="buttonSecondary"] {
+  border-radius: var(--cl-radius-md) !important;
+}
+
+/* Input / filtros */
+.x-filterBox-filterInput,
+.x-searchInput-searchInputInput {
+  border-radius: var(--cl-radius-md) !important;
+}
+
+/* Imagens de entidade */
+.main-entityHeader-imageContainer,
+.main-entityHeader-image {
+  border-radius: var(--cl-radius-lg) !important;
+}
+
+/* Avatares */
+.main-avatar-image,
+.main-userWidget-boxCondensed,
+.main-userWidget-box {
+  border-radius: var(--cl-radius-md) !important;
+}
+
+/* Seções */
+.main-nowPlayingView-section {
+  border-radius: var(--cl-radius-md) !important;
+}
+
+/* ============================================================
+   DENSIDADE — compressão inteligente em espaços pequenos
+   ============================================================ */
+
+@media screen and (max-width: 900px) {
+  .main-nowPlayingBar-nowPlayingBar {
+    height: 72px !important;
+  }
+
+  .view-homeShortcutsGrid-grid {
+    --item-height: 48px !important;
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
+
+  .main-shelf-title {
+    font-size: 1.1rem !important;
+  }
+}

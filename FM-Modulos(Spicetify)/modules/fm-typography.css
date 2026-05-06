@@ -1,0 +1,168 @@
+/**
+ * @name FM Typography
+ * @author Plague Doctor
+ * @description Tipografia refinada, hierarquia visual e legibilidade premium
+ * @version 1.0.0
+ */
+
+/* ============================================================
+   IMPORT — fonte display elegante via Google Fonts
+   ============================================================ */
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,300&family=DM+Serif+Display:ital@0;1&display=swap');
+
+:root {
+  --fm-font-body:    'DM Sans', sans-serif;
+  --fm-font-display: 'DM Serif Display', serif;
+
+  --fm-weight-light:   300;
+  --fm-weight-regular: 400;
+  --fm-weight-medium:  500;
+  --fm-weight-semi:    600;
+
+  --fm-tracking-tight: -0.03em;
+  --fm-tracking-base:  -0.01em;
+  --fm-tracking-wide:   0.06em;
+  --fm-tracking-wider:  0.12em;
+}
+
+/* — Corpo geral — */
+body,
+.encore-text,
+[class*="TypeElement"],
+[class*="Text-sc"],
+span, p, div {
+  font-family: var(--fm-font-body) !important;
+  letter-spacing: var(--fm-tracking-base);
+  font-weight: var(--fm-weight-regular);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* — Títulos grandes (artista, playlist) — */
+.main-entityHeader-title h1,
+.main-entityHeader-title,
+.main-shelf-title > span,
+.main-entityHeader-topbarTitle {
+  font-family: var(--fm-font-display) !important;
+  font-weight: var(--fm-weight-regular) !important;
+  letter-spacing: var(--fm-tracking-tight) !important;
+  line-height: 1.1 !important;
+}
+
+/* — Nome da faixa no now playing — */
+.main-trackInfo-name a,
+.main-trackInfo-name {
+  font-family: var(--fm-font-body) !important;
+  font-weight: var(--fm-weight-semi) !important;
+  letter-spacing: var(--fm-tracking-tight) !important;
+}
+
+/* — Artista/subtítulo — */
+.main-trackInfo-artists a,
+.main-trackInfo-artists,
+.main-trackInfo-subtitleSingleLine {
+  font-family: var(--fm-font-body) !important;
+  font-weight: var(--fm-weight-light) !important;
+  letter-spacing: var(--fm-tracking-base) !important;
+  opacity: 0.7;
+}
+
+/* — Nomes na sidebar / biblioteca — */
+.ListRowTitle__LineClamp-sc-1xe2if1-0,
+.main-yourLibraryX-listRowTitle,
+[class*="listRowTitle"] {
+  font-family: var(--fm-font-body) !important;
+  font-weight: var(--fm-weight-medium) !important;
+  letter-spacing: var(--fm-tracking-tight) !important;
+}
+
+/* — Labels de seção (shelf headers) — */
+.main-shelf-title {
+  font-family: var(--fm-font-body) !important;
+  font-weight: var(--fm-weight-semi) !important;
+  letter-spacing: var(--fm-tracking-base) !important;
+  text-transform: none !important;
+}
+
+/* — Botões — */
+[data-encore-id="buttonPrimary"] span,
+[data-encore-id="buttonSecondary"] span,
+.Button-sc-y0gtbx-0 span {
+  font-family: var(--fm-font-body) !important;
+  font-weight: var(--fm-weight-semi) !important;
+  letter-spacing: var(--fm-tracking-wide) !important;
+  text-transform: uppercase !important;
+  font-size: 0.72rem !important;
+}
+
+/* — Chips de filtro — */
+.ChipInnerComponent-sm span {
+  font-family: var(--fm-font-body) !important;
+  font-weight: var(--fm-weight-medium) !important;
+  letter-spacing: var(--fm-tracking-base) !important;
+}
+
+/* — Cabeçalho da tracklist (colunas #, TÍTULO, etc.) — */
+.main-trackList-rowHeaderStickyContent,
+.main-trackList-trackListHeaderRow > div {
+  font-family: var(--fm-font-body) !important;
+  font-weight: var(--fm-weight-medium) !important;
+  letter-spacing: var(--fm-tracking-wider) !important;
+  text-transform: uppercase !important;
+  font-size: 0.68rem !important;
+  opacity: 0.5;
+}
+
+/* — Duração / contagens — */
+.main-trackList-rowDuration,
+.main-trackList-rowPlayCount {
+  font-family: 'DM Sans', monospace !important;
+  font-variant-numeric: tabular-nums !important;
+  letter-spacing: 0.02em !important;
+  opacity: 0.55;
+}
+
+/* — Tempo de progresso — */
+.playback-bar__progress-time-elapsed,
+[class*="playback-bar__progress-time"] {
+  font-family: var(--fm-font-body) !important;
+  font-variant-numeric: tabular-nums !important;
+  font-weight: var(--fm-weight-light) !important;
+  font-size: 0.7rem !important;
+  letter-spacing: 0.03em;
+  opacity: 0.6;
+}
+
+/* — Letras (lyrics) — */
+.lyrics-lyricsContent-lyric,
+.lyrics-lyricsContainer-LyricsLine {
+  font-family: var(--fm-font-display) !important;
+  font-weight: var(--fm-weight-regular) !important;
+  letter-spacing: var(--fm-tracking-tight) !important;
+}
+
+/* — Nomes na nav — */
+.main-navBar-navBarLinkActive span,
+.main-collectionLinkButton span,
+[class*="navBarLink"] span {
+  font-family: var(--fm-font-body) !important;
+  font-weight: var(--fm-weight-medium) !important;
+  letter-spacing: var(--fm-tracking-base) !important;
+  font-size: 0.82rem !important;
+}
+
+/* — Cards (nome e subtítulo) — */
+.main-cardHeader-text,
+[class*="CardTitle"],
+[class*="cardTitle"] {
+  font-family: var(--fm-font-body) !important;
+  font-weight: var(--fm-weight-semi) !important;
+  letter-spacing: var(--fm-tracking-tight) !important;
+}
+
+[class*="cardSubtitle"],
+.main-card-subTitle {
+  font-family: var(--fm-font-body) !important;
+  font-weight: var(--fm-weight-light) !important;
+  opacity: 0.6;
+}
