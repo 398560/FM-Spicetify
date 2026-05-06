@@ -156,8 +156,71 @@
   white-space: nowrap;
 }
 
-.main-yourLibraryX-entryPoints:has(.main-yourLibraryX-libraryContainer) {
+/* ===== FM FIX LIBRARY SEM SUMIR PLAYLIST ===== */
+
+/* sidebar normal */
+.Root__nav-bar,
+#Desktop_LeftSidebar_Id {
+  height: auto !important;
+  min-height: 0 !important;
+  overflow: visible !important;
+}
+
+/* container da biblioteca nao pode esconder tudo */
+.main-yourLibraryX-entryPoints,
+.main-yourLibraryX-libraryContainer,
+.main-yourLibraryX-libraryRootlist,
+.main-rootlist-wrapper {
+  height: auto !important;
+  min-height: 0 !important;
+  max-height: none !important;
+  overflow: visible !important;
+}
+
+/* deixa a lista aparecer normal */
+.main-yourLibraryX-libraryContainer {
+  display: block !important;
+}
+
+/* scroller da library */
+.main-rootlist-wrapper [data-overlayscrollbars-viewport],
+.main-yourLibraryX-libraryRootlist [data-overlayscrollbars-viewport],
+.main-yourLibraryX-libraryContainer [data-overlayscrollbars-viewport] {
+  height: auto !important;
+  max-height: none !important;
+  overflow-y: visible !important;
+  overflow-x: hidden !important;
+}
+
+/* linhas das playlists */
+.main-yourLibraryX-listItem,
+.main-rootlist-wrapper [role="row"] {
+  display: flex !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  min-height: 56px !important;
+  box-sizing: border-box !important;
   overflow: hidden !important;
+}
+
+/* textos nao somem */
+.main-yourLibraryX-listRowDetails,
+.main-yourLibraryX-listRowTitle,
+.main-yourLibraryX-listRowSubtitle,
+.main-rootlist-wrapper .LineClamp {
+  display: block !important;
+  min-width: 0 !important;
+  max-width: 100% !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  white-space: nowrap !important;
+}
+
+/* mantem o bloco principal da library livre */
+.main-yourLibraryX-entryPoints:has(.main-yourLibraryX-libraryContainer) {
+  overflow: visible !important;
 }
 
 /* Library compacta: vira coluna de icones de verdade em vez de comprimir a lista. */
